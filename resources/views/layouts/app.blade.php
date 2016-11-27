@@ -30,9 +30,8 @@
         </div>
     </div>
 
-    @section('test')
-        <p>This is a test section</p>
-    @show
+
+
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
