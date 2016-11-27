@@ -1,0 +1,77 @@
+
+.top {
+    background-color: #555555;
+    height: 15px;
+}
+
+.middle {
+    background-color: black;
+    height: 70px;
+}
+
+
+.background {
+    width: 687.5px;
+    height: 453.5px;
+    margin: auto;
+    background-image: url(pokerTable.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    position: relative;
+}
+.background .wrapper div {
+    position: absolute;
+    background-image: url(koloda.png);
+    width: 44px;
+    height: 65.6px;
+    background-repeat: no-repeat;
+    background-position: 0% 100%;
+}
+.a0 {
+    left: 43%;
+    bottom: 25%;
+}
+.a1 {
+    left: 50%;
+    bottom: 25%;
+}
+.a2 {
+    left: 43%;
+    top: 15%;
+}
+.a3 {
+    left: 50%;
+    top: 15%;
+}
+.a4 {
+    left: 33%;
+    top: 38%;
+}
+.a5 {
+    left: 40%;
+    top: 38%;
+}
+.a6 {
+    left: 47%;
+    top: 38%;
+}
+.a7 {
+    left: 54%;
+    top: 38%;
+}
+.a8 {
+    left: 61%;
+    top: 38%;
+}
+
+.play [type='button'] {
+    width: 140px;
+    height: 40px;
+    text-align: center;
+    background-color: grey;
+    border: black 4px solid;
+    font-size: 1em;
+    font-weight: bold;
+    margin:  auto;
+    display: block;
+}
