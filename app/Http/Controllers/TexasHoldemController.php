@@ -95,7 +95,6 @@ class TexasHoldemController extends Controller
             }
         }
 
-
         /*
          * We trap here if we have not any array with 5 or more members
          * between (2-14) or (102-114) or (202-214) or (302-314)
@@ -183,7 +182,7 @@ class TexasHoldemController extends Controller
         /*
         * We determine existence of street combination between second five array members
         */
-        if ($count < 4) {
+        if ($count < 4 and count($rArray) > 5) {
             $count = 0;
             for($j = 2; $j <= 5; $j++) {
                 if ($rArray[$j - 1] - $rArray[$j] == 1) {
@@ -199,7 +198,7 @@ class TexasHoldemController extends Controller
         * We determine existence of street combination between third five array members
         */
 
-        if ($count < 4) {
+        if ($count < 4 and count($rArray) > 6) {
             $count = 0;
             for($z = 3; $z <= 6; $z++) {
                 if ($rArray[$z - 1] - $rArray[$z] == 1) {
@@ -216,7 +215,7 @@ class TexasHoldemController extends Controller
          * and that is why we have 8 array members
         */
 
-        if ($count < 4 and $ace == 1) {
+        if ($count < 4 and $ace == 1 and count($rArray) > 7) {
             $count = 0;
             for($y = 4; $y <= 7; $y++) {
                 if ($rArray[$y - 1] - $rArray[$y] == 1) {
