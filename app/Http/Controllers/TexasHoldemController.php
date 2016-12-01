@@ -181,6 +181,8 @@ class TexasHoldemController extends Controller
 
         /*
         * We determine existence of street combination between second five array members
+         * We write a count($rArray) - because method flesh is dermined on street (flesh array consists of 5 members,
+         * if there is an ace in flesh array - from 6 members)
         */
         if ($count < 4 and count($rArray) > 5) {
             $count = 0;
@@ -215,7 +217,7 @@ class TexasHoldemController extends Controller
          * and that is why we have 8 array members
         */
 
-        if ($count < 4 and $ace == 1 and count($rArray) > 7) {
+        if ($count < 4 and count($rArray) > 7) {
             $count = 0;
             for($y = 4; $y <= 7; $y++) {
                 if ($rArray[$y - 1] - $rArray[$y] == 1) {
