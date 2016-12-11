@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class OnlineController extends Controller
 {
 
-    public function online(Request $request) {
+    public function online(OnlineRequest $request) {
 
         $data = $request->all();
         $lastV = $data['online'];
