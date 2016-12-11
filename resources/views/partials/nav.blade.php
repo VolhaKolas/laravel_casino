@@ -40,7 +40,7 @@
                 </a>
 
 
-                <a class="navbar-brand" href="{{ url('/texas') }}">
+                <a class="navbar-brand" href="{{ url('/userpage') }}">
                     Играть
                 </a>
 

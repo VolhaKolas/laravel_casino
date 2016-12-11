@@ -4,11 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title', 'Главная')</title>
+    <title>@yield('title', 'Казино')</title>
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link href="{{ asset('css/sticky-footer-navbar.css') }}" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 </head>
 
 <body>
@@ -19,7 +20,10 @@
 <div class="container">
     @yield('content')
 </div>
-
+@if(auth::check())
+@include('partials.online')
+<script src="{{asset('js/online.js')}}"></script>
+@endif
 <footer class="footer">
     <div class="container">
         <p class="text-muted"></p>
