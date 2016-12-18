@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableTime extends Migration
+class AddColumnsTimeOnline extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateTableTime extends Migration
      */
     public function up()
     {
-        Schema::create('time', function(Blueprint $table) {
-            $table->bigInteger('user_id')->unique();
+        Schema::table('users', function ($table){
             $table->bigInteger('time');
+            $table->integer('online');
         });
     }
 
@@ -26,6 +26,9 @@ class CreateTableTime extends Migration
      */
     public function down()
     {
-        Schema::drop('time');
+        Schema::table('users', function($table) {
+            $table->dropColumn('time');
+            $table->dropColumn('online');
+        });
     }
 }

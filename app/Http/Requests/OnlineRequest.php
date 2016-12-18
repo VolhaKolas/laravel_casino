@@ -24,8 +24,8 @@ class OnlineRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'integer',
-            'online' => 'integer|min:1000000000'
+            'online' => 'integer',
+            'time' => 'integer|min:1000000000'
         ];
     }
 }

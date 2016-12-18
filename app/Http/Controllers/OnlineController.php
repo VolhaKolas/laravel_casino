@@ -10,31 +10,19 @@ use Illuminate\Http\Request;
 class OnlineController extends Controller
 {
 
-    public function online(OnlineRequest $request) {
+    public function online(OnlineRequest $request)
+    {
 
         $data = $request->all();
-        $lastV = $data['online'];
-        $lastV = round($lastV/1000);
+        $lastV = $data['time'];
+        $online = $data['online'];
         $id = auth()->id();
-        $tableId = DB::table('time')->where('user_id', $id)->value('user_id');
 
-        $isId = false;
-            if($tableId != null) {
-                $isId = true;
-            }
+        DB::table('users')->where('id', $id)->update([
+            'time' => $lastV,
+            'online' => $online
+        ]);
 
-        if($isId == false) {
-            DB::table('time')->insert([
-                'user_id' => $id,
-                'time' => $lastV
-            ]);
-        }
-        else {
-            DB::table('time')->where('user_id', $id)->update([
-                'time' => $lastV
-            ]);
-        }
-        return $lastV;
     }
 
 }

@@ -1,38 +1,30 @@
 
 $(document).ready(function () {
     var date = new Date().getTime();
-    $("#online").val(date);
-
-
-    var currentT = new Date().getTime();
-    var t = currentT - $("#online").val();
+    $("#time").val(date);
+    $('#online').val(1);
     var data = $("#onlineForm").serialize();
-
-//Отправляет ajax запрос, что пользователь только зашел. Надо будет удалить потом. И ввести чтобы данные не аяксом отправлялись.
-        $.ajax({
-            type: "POST",
-            url: "/online",
-            data: data,
-            success: function (data) {
-                console.log(data);
-            }
-        });
 
 
     setInterval(function () {
         currentT = new Date().getTime();
-        t = currentT - $("#online").val();
+        t = (currentT - $("#time").val())/60000;
+        var online = 1;
+        if(t >= 15) {
+            online = 0;
+        }
+        else {
+            online = 1;
+        }
+        $('#online').val(online);
         data = $("#onlineForm").serialize();
 
-        if(t/60000 < 16) {
+        if(t < 16) {
 
             $.ajax({
                 type: "POST",
                 url: "/online",
                 data: data,
-                success: function (data) {
-                    console.log(data);
-                }
             });
             return false;
         }
@@ -45,5 +37,5 @@ $('form').on("submit", function (e) {
 
 $(document).on("keypress click mousemove touchmove", function(event) {
     var date = new Date().getTime();
-    $("#online").val(date);
+    $("#time").val(date);
 });
