@@ -27,22 +27,6 @@
     background-repeat: no-repeat;
     background-position: 0% 100%;
 }
-.a0 {
-    left: 43%;
-    bottom: 25%;
-}
-.a1 {
-    left: 50%;
-    bottom: 25%;
-}
-.a2 {
-    left: 43%;
-    top: 15%;
-}
-.a3 {
-    left: 50%;
-    top: 15%;
-}
 .a4 {
     left: 33%;
     top: 38%;
@@ -63,6 +47,26 @@
     left: 61%;
     top: 38%;
 }
+
+
+
+.a0 {
+    left: 43%;
+    bottom: 25%;
+}
+.a1 {
+    left: 50%;
+    bottom: 25%;
+}
+.a2 {
+    left: 43%;
+    top: 15%;
+}
+.a3 {
+    left: 50%;
+    top: 15%;
+}
+
 
 .play [type='button'] {
     width: 140px;

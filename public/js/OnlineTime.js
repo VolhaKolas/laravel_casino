@@ -1,16 +1,22 @@
-
 $(document).ready(function () {
     var date = new Date().getTime();
     $("#time").val(date);
     $('#online').val(1);
     var data = $("#onlineForm").serialize();
 
+//Отправляет ajax запрос, что пользователь только зашел. Надо будет удалить потом. И ввести чтобы данные не аяксом отправлялись.
+    $.ajax({
+        type: "POST",
+        url: "/online",
+        data: data,
+    });
+
 
     setInterval(function () {
         currentT = new Date().getTime();
         t = (currentT - $("#time").val())/60000;
         var online = 1;
-        if(t >= 15) {
+        if(t > 15) {
             online = 0;
         }
         else {
@@ -31,11 +37,8 @@ $(document).ready(function () {
 
     }, 60000);
 });
-$('form').on("submit", function (e) {
-    e.preventDefault();
-});
 
-$(document).on("keypress click mousemove touchmove", function(event) {
+$(document).on("keypress mousemove touchmove", function(event) {
     var date = new Date().getTime();
     $("#time").val(date);
 });

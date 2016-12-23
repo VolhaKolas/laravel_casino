@@ -63,7 +63,7 @@ class LoginController extends Controller
 
         if ($this->guard()->attempt($credentials, $request->has('remember'))) {
             DB::table('users')->where('id', auth()->id())->update([
-                'time' => time(),
+                'time' => time() * 1000,
                 'online' => 1
             ]);
 

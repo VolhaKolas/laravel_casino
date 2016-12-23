@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TexasHoldemController extends Controller
 {
@@ -504,72 +505,51 @@ class TexasHoldemController extends Controller
         return $randArray;
     }
 
-    public function streetTest()
-    {
-        $array = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-        $first = [2, 3, 4, 5, 6, 7, 8];
-        $count = 0;
-
-        while($first[0] <= 14) {
-            while ($first[1] <= 14) {
-                while ($first[2] <= 14) {
-                    while ($first[3] <= 14) {
-                        while ($first[4] <= 14) {
-                            while ($first[5] <= 14) {
-                                while ($first[6] <= 14) {
-                                    foreach ($first as $f) {
-                                        echo $f . " | ";
-                                    }
-                                    $count++;
-                                    echo $count . " | ";
-                                    echo self::street($first);
-                                    echo "<br>";
-                                    $first[6] = $first[6] + 1;
-                                }
-                                $first[6] = $first[5] + 2;
-                                $first[5] = $first[5] + 1;
-                            }
-                            $first[6] = $first[4] + 3;
-                            $first[5] = $first[4] + 2;
-                            $first[4] = $first[4] + 1;
-                        }
-                        $first[6] = $first[3] + 4;
-                        $first[5] = $first[3] + 3;
-                        $first[4] = $first[3] + 2;
-                        $first[3] = $first[3] + 1;
-                    }
-                    $first[6] = $first[2] + 5;
-                    $first[5] = $first[2] + 4;
-                    $first[4] = $first[2] + 3;
-                    $first[3] = $first[2] + 2;
-                    $first[2] = $first[2] + 1;
-                }
-                $first[6] = $first[1] + 6;
-                $first[5] = $first[1] + 5;
-                $first[4] = $first[1] + 4;
-                $first[3] = $first[1] + 3;
-                $first[2] = $first[1] + 2;
-                $first[1] = $first[1] + 1;
-            }
-            $first[6] = $first[0] + 7;
-            $first[5] = $first[0] + 6;
-            $first[4] = $first[0] + 5;
-            $first[3] = $first[0] + 4;
-            $first[2] = $first[0] + 3;
-            $first[1] = $first[0] + 2;
-            $first[0] = $first[0] + 1;
-        }
-    }
-
 
     public function game(Request $request) {
+        $tables = DB::select('SHOW TABLES');
+        $reg = '/table_([\d]+)/';
+        $table = 'table_';
+        $mat =[];
+            foreach ($tables as $tab) {
+                foreach ($tab as $t) {
+                    if (preg_match($reg, $t, $matches)) {
+                        $mat = array_merge($mat, [(int)$matches[1]]);
+                    }
+                }
+            }
+
+        if (count($mat) == 0) {
+            $table = 'table_' . 1;
+        }
+        else {
+            sort($mat);
+
+            for ($i = 1; $i < count($mat); $i++) {
+                if ($mat[$i] - $mat[$i - 1] > 1) {
+                    $table = $table . ($i + 1);
+                    break;
+                }
+            }
+            if($mat[0] > 1) {
+                $table = 'table_' . 1;
+            }
+            else if ($table == 'table_') {
+                $table = $table . (count($mat) + 1);
+            }
+        }
+
+
+
+
+
+
 
         $numbers = self::arr();
         $priority = self::priority($numbers);
-
         return view('holdem.holdem', compact('numbers', 'priority'));
-
     }
+
 
 
 }

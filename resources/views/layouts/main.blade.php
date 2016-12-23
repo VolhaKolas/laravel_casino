@@ -22,7 +22,7 @@
 </div>
 @if(auth::check())
 @include('partials.online')
-<script src="{{asset('js/online.js')}}"></script>
+<script src="{{asset('js/OnlineTime.js')}}"></script>
 @endif
 <footer class="footer">
     <div class="container">
