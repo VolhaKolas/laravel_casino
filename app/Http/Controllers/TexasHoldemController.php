@@ -507,39 +507,51 @@ class TexasHoldemController extends Controller
 
 
     public function game(Request $request) {
-        $tables = DB::select('SHOW TABLES');
-        $reg = '/table_([\d]+)/';
-        $table = 'table_';
-        $mat =[];
-            foreach ($tables as $tab) {
-                foreach ($tab as $t) {
-                    if (preg_match($reg, $t, $matches)) {
-                        $mat = array_merge($mat, [(int)$matches[1]]);
+
+        $user = auth()->id();
+        //checking the existence of the user in table_users
+        $usersCount = DB::table('table_users')->select('id')->where('user_id', "$user")->get();
+
+        //if the user doesn't exist in the table_users
+        if(count($usersCount) == 0) {
+
+            //trying to get id of free table (table with waiting for a game playes or without players)
+            $tables = DB::table('tables')->pluck('free', 'id');
+            foreach ($tables as $ti => $f) {
+                if ($f == 1) {
+                    $table_id = $ti;
+                    break;
+                }
+            }
+
+            //if there is not any free table, we create the table
+            if (count($tables) == 0 or $table_id == null) {
+                DB::table("tables")->insert(
+                    ['id' => null, 'free' => 1]
+                );
+
+                //and then trying to get id of free table
+                $tables = DB::table('tables')->pluck('free', 'id');
+                foreach ($tables as $ti => $f) {
+                    if ($f == 1) {
+                        $table_id = $ti;
+                        break;
                     }
                 }
             }
 
-        if (count($mat) == 0) {
-            $table = 'table_' . 1;
+            //if the current user is the 8-th player in table with free id, we close this table by free == 0
+            $tablesCount = DB::table('table_users')->select('id')->where('table_id', "$table_id")->get();
+            if (count($tablesCount) == 7) {
+                DB::table('tables')->where('id', "$table_id")->update(['free' => 0]);
+            }
+
+            //here we add current user to table_users
+            DB::table('table_users')->insert(
+                ['id' => null, 'table_id' => "$table_id", 'user_id' => "$user"]
+            );
         }
-        else {
-            sort($mat);
-
-            for ($i = 1; $i < count($mat); $i++) {
-                if ($mat[$i] - $mat[$i - 1] > 1) {
-                    $table = $table . ($i + 1);
-                    break;
-                }
-            }
-            if($mat[0] > 1) {
-                $table = 'table_' . 1;
-            }
-            else if ($table == 'table_') {
-                $table = $table . (count($mat) + 1);
-            }
-        }
-
-
+        
 
 
 

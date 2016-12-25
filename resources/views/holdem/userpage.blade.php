@@ -7,7 +7,8 @@
    @endforeach
 
 
-   <form action="{{ route('texas')  }}" method="get">
+   <form action="{{ route('texas')  }}" method="post">
+       {{ csrf_field() }}
        <button class="btn btn-primary">Рандомная игра</button>
    </form>
 
