@@ -1,20 +1,21 @@
 $(document).ready(function() {
-    var data = "<?= $table_id ?>";
+
 
     setInterval(function () {
         $.ajax({
             type: "GET",
             url: "/before",
-            data: {table: data},
             success: function (data) {
                 //data[0] - time before game, data[1] - count of users
-                $('.timer var').html(data[0]);
-                if (data[0] <= 0 & data[1] >= 2 || data[1] == 8) {
+                var timeBefore = data[0];
+                var users = data[1];
+                if (timeBefore <= 0 & users >= 2 || users == 8) {
                     window.location.href = "/texas";
                 }
-                else if (data[0] <= 0 & data[1] == 1) {
+                else if (timeBefore <= 0 & users == 1) {
                     window.location.href = "/userpage";
                 }
+                $('.timer var').html(timeBefore);
             }
         });
         return false;

@@ -61,10 +61,9 @@ class PreGameController extends Controller
     }
 
     public function before(Request $request) {
-        $table_id =  $request->all();
-        $table_id = $table_id['table'];
+        $table_id = \App\Table_user::where('user_id', auth()->id())->value('table_id');
         $time = \App\Table::where('id', "$table_id")->value('timer');
-        $users = \App\Table_user::where('table_id', "$table_id")->select("user_id")->get();
+        $users = \App\Table_user::where('table_id', $table_id)->select("user_id")->get();
         $countUsers = count($users);
         $timeBefore = 60 - (time() - $time);
 
