@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTablesTable extends Migration
+class AddColumnHandCardsTableCardsMoneyTableMoneyTimer extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('free')->default(1);
-            $table->bigInteger('timer')->nullable();
+        Schema::table('table_users', function ($table) {
+            $table->integer('money')->nullable();
         });
     }
 
@@ -27,6 +25,9 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::table('table_users', function ($table) {
+            $table->dropColumn(['money']);
+
+        });
     }
 }

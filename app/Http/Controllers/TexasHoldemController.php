@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Table_user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -506,62 +507,13 @@ class TexasHoldemController extends Controller
     }
 
 
-    public function game(Request $request) {
-
-        $user = auth()->id();
-        //checking the existence of the user in table_users
-        $usersCount = DB::table('table_users')->select('id')->where('user_id', "$user")->get();
-
-        //if the user doesn't exist in the table_users
-        if(count($usersCount) == 0) {
-
-            //trying to get id of free table (table with waiting for a game playes or without players)
-            $tables = DB::table('tables')->pluck('free', 'id');
-            foreach ($tables as $ti => $f) {
-                if ($f == 1) {
-                    $table_id = $ti;
-                    break;
-                }
-            }
-
-            //if there is not any free table, we create the table
-            if (count($tables) == 0 or $table_id == null) {
-                DB::table("tables")->insert(
-                    ['id' => null, 'free' => 1]
-                );
-
-                //and then trying to get id of free table
-                $tables = DB::table('tables')->pluck('free', 'id');
-                foreach ($tables as $ti => $f) {
-                    if ($f == 1) {
-                        $table_id = $ti;
-                        break;
-                    }
-                }
-            }
-
-            //if the current user is the 8-th player in table with free id, we close this table by free == 0
-            $tablesCount = DB::table('table_users')->select('id')->where('table_id', "$table_id")->get();
-            if (count($tablesCount) == 7) {
-                DB::table('tables')->where('id', "$table_id")->update(['free' => 0]);
-            }
-
-            //here we add current user to table_users
-            DB::table('table_users')->insert(
-                ['id' => null, 'table_id' => "$table_id", 'user_id' => "$user"]
-            );
-        }
-        
-
-
-
-
-
+    public function game(Request $request)
+    {
         $numbers = self::arr();
         $priority = self::priority($numbers);
+
         return view('holdem.holdem', compact('numbers', 'priority'));
     }
-
 
 
 }

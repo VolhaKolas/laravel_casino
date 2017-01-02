@@ -19,7 +19,7 @@ class PokerGame
 
         //Сделай нормальный мидлвар, чтобы заходило только со страницы userpage
 
-        if($_SERVER['HTTP_REFERER'] == 'http://poker/userpage') {
+        if($_SERVER['HTTP_REFERER'] == 'http://poker/pregame') {
 
             return $next($request);
         }

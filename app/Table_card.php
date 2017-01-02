@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Table extends Model
+class Table_card extends Model
 {
     protected $fillable = [
-        'free'
+        'table_id', 'cards', 'table_money'
     ];
     public $timestamps = false;
-
 }
