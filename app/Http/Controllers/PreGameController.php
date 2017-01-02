@@ -68,6 +68,11 @@ class PreGameController extends Controller
         $countUsers = count($users);
         $timeBefore = 60 - (time() - $time);
 
+        if($countUsers == 1 and $timeBefore == 0) {
+            \App\Table_user::where('user_id', auth()->id())->delete();
+            \App\Table::where('id', $table_id)->delete();
+        }
         return [$timeBefore, $countUsers];
     }
+
 }
