@@ -2,10 +2,10 @@
 
 namespace App;
 
-use App\Street;
+use App\Straight;
 use Illuminate\Database\Eloquent\Model;
 
-class Flesh extends Model
+class Flush extends Model
 {
     /*combination's priority:
 street flash - 1e+16
@@ -25,7 +25,7 @@ couple - 1e+2
      * @return {Number)
      */
 
-    final public static function flesh($array)
+    final public static function flush($array)
     {
         rsort($array); // Sort an array in reverse order
         $newArray = [];
@@ -112,7 +112,7 @@ couple - 1e+2
          * Because to make correct priority we need to take into account all numbers.
          */
         else  {
-            $streetFlash = Street::street($newArray);
+            $streetFlash = Straight::straight($newArray);
             if($streetFlash != 0) {
                 $result = $streetFlash * 1e+8;
             }

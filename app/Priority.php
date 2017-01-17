@@ -3,8 +3,8 @@
 namespace App;
 
 use App\Couples;
-use App\Flesh;
-use App\Street;
+use App\Flush;
+use App\Straight;
 use Illuminate\Database\Eloquent\Model;
 
 class Priority extends Model
@@ -34,8 +34,8 @@ couple - 1e+2
             $arr = array_merge(array_slice($array, $i * 2, 2), $common);
             $hight1 = $arr[0] % 100; //first hight card {@number}
             $hight2 = $arr[1] % 100; //second hight card {@number}
-            $flesh = Flesh::flesh($arr); //flesh {@number}
-            $street = Street::street($arr); //street {@number}
+            $flesh = Flush::flush($arr); //flesh {@number}
+            $street = Straight::straight($arr); //street {@number}
             $couples = Couples::couples($arr); //couples {@number}
 
             if($flesh >= 1e+16) {

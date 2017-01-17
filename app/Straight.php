@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Street extends Model
+class Straight extends Model
 {
     /*combination's priority:
 street flash - 1e+16
@@ -24,7 +24,7 @@ couple - 1e+2
      * @return {Number)
      */
 
-    final public static function street($array)
+    final public static function straight($array)
     {
 
         $rArray = [];
