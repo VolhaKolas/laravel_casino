@@ -10,14 +10,14 @@ use Illuminate\Database\Eloquent\Model;
 class Priority extends Model
 {
     /*combination's priority:
-street flash - 1e+16
+straight flash - 1e+16
 square - 1e+14
 full house - 1e+12
-flesh - 1e+10
-street - 1e+8
+flush - 1e+10
+straight - 1e+8
 triple - 1e+6
-2 couples - 1e+4
-couple - 1e+2
+2 pairs - 1e+4
+pair - 1e+2
 */
 
 
@@ -39,39 +39,39 @@ couple - 1e+2
             $couples = Couples::couples($arr); //couples {@number}
 
             if($flesh >= 1e+16) {
-                $text = "street flash";
+                //straight flush
                 $result = $flesh;
             }
             else if($couples >= 1e+14 and $couples < 1e+16) {
-                $text = "square";
+                //square
                 $result = $couples;
             }
             else if($couples >= 1e+12 and $couples < 1e+14) {
-                $text = "full house";
+                //full house
                 $result = $couples;
             }
             else if($flesh >= 1e+10) {
-                $text = "flash";
+                //flush
                 $result = $flesh;
             }
             else if($street >= 1e+8 and $street < 1e+10) {
-                $text = "street";
+                //straight
                 $result = $street;
             }
             else if($couples >= 1e+6 and $couples < 1e+8) {
-                $text = "triple";
+                //triple
                 $result = $couples;
             }
             else if($couples >= 1e+4 and $couples < 1e+6) {
-                $text = "two couples";
+                //two pairs
                 $result = $couples;
             }
             else if($couples >= 1e+2 and $couples < 1e+4) {
-                $text = "couple";
+                //pair
                 $result = $couples;
             }
             else {
-                $text = "hight card";
+                //hight card
                 if($hight1 > $hight2) {
                     $result = $hight1 + $hight2 * 1e-2;
                 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Table extends Model
 {
     protected $fillable = [
-        'free'
+        'free', 'timer'
     ];
     public $timestamps = false;
 

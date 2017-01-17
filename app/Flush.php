@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Flush extends Model
 {
     /*combination's priority:
-street flash - 1e+16
+straight flash - 1e+16
 square - 1e+14
 full house - 1e+12
-flesh - 1e+10
-street - 1e+8
+flush - 1e+10
+straight - 1e+8
 triple - 1e+6
-2 couples - 1e+4
-couple - 1e+2
+2 pairs - 1e+4
+pair - 1e+2
 */
 
 

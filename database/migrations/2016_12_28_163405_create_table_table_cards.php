@@ -16,8 +16,12 @@ class CreateTableTableCards extends Migration
         Schema::create('table_cards', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('table_id')->unsigned();
-            $table->string('cards')->nullable();
             $table->integer('table_money')->nullable();
+            $table->integer('flop1')->nullable();
+            $table->integer('flop2')->nullable();
+            $table->integer('flop3')->nullable();
+            $table->integer('turn')->nullable();
+            $table->integer('river')->nullable();
 
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
         });

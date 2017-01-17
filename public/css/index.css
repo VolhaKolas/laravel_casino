@@ -19,7 +19,7 @@
     background-size: 100%;
     position: relative;
 }
-.background .wrapper div {
+.background div {
     position: absolute;
     background-image: url(koloda.png);
     width: 44px;
@@ -27,42 +27,86 @@
     background-repeat: no-repeat;
     background-position: 0% 100%;
 }
-.a4 {
-    left: 33%;
-    top: 38%;
-}
-.a5 {
-    left: 40%;
-    top: 38%;
-}
-.a6 {
-    left: 47%;
-    top: 38%;
-}
-.a7 {
-    left: 54%;
-    top: 38%;
-}
-.a8 {
-    left: 61%;
-    top: 38%;
-}
 
 
 
-.a0 {
-    left: 43%;
-    bottom: 25%;
+
+.background .a0 {
+    left: 73%;
+    bottom: 5%;
 }
-.a1 {
-    left: 50%;
-    bottom: 25%;
+.background .a1 {
+    left: 65%;
+    bottom: 5%;
 }
-.a2 {
-    left: 43%;
-    top: 15%;
+
+
+.background .a2 {
+    left: 35%;
+    bottom: 5%;
 }
-.a3 {
-    left: 50%;
-    top: 15%;
+.background .a3 {
+    left: 27%;
+    bottom: 5%;
 }
+
+
+.background .a4 {
+    left: 8%;
+    bottom: 12%;
+}
+.background .a5 {
+    left: 0%;
+    bottom: 12%;
+}
+
+
+.background .a6 {
+    left: 8%;
+    top: 4%;
+}
+.background .a7 {
+    left: 0%;
+    top: 4%;
+}
+
+
+.background .a8 {
+    left: 35%;
+    top: -4%;
+}
+.background .a9 {
+    left: 27%;
+    top: -4%;
+}
+
+
+.background .a10 {
+    left: 73%;
+    top: -4%;
+}
+.background .a11 {
+    left: 65%;
+    top: -4%;
+}
+
+
+.background .a12 {
+    right: 8%;
+    top: 4%;
+}
+.background .a13 {
+    right: 0%;
+    top: 4%;
+}
+
+
+.background .a14 {
+    right: 8%;
+    bottom: 12%;
+}
+.background .a15 {
+    right: 0%;
+    bottom: 12%;
+}
+
