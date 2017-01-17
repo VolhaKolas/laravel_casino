@@ -66,16 +66,3 @@
     left: 50%;
     top: 15%;
 }
-
-
-.play [type='button'] {
-    width: 140px;
-    height: 40px;
-    text-align: center;
-    background-color: grey;
-    border: black 4px solid;
-    font-size: 1em;
-    font-weight: bold;
-    margin:  auto;
-    display: block;
-}
