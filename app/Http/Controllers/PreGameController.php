@@ -71,6 +71,9 @@ class PreGameController extends Controller
             \App\Table_user::where('user_id', auth()->id())->delete();
             \App\Table::where('id', $table_id)->delete();
         }
+        else if ($timeBefore == 0 and $countUsers > 1) {
+            \App\Table::where("id", $table_id)->update(["free" => 0]);
+        }
         return [$timeBefore, $countUsers];
     }
 

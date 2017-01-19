@@ -6,6 +6,7 @@ $(document).ready(function() {
             type: "GET",
             url: "/before",
             success: function (data) {
+                $('.timer var').empty();
                 //data[0] - time before game, data[1] - count of users
                 var timeBefore = data[0];
                 var users = data[1];
@@ -15,7 +16,9 @@ $(document).ready(function() {
                 else if (timeBefore <= 0 & users == 1) {
                     window.location.href = "/userpage";
                 }
-                $('.timer var').html(timeBefore);
+                else {
+                    $('.timer var').html(timeBefore);
+                }
             }
         });
         return false;

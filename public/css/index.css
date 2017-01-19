@@ -29,84 +29,147 @@
 }
 
 
+#dealer, #smallblind, #bigblind  {
+    position: absolute;
+    width: 35.25px;
+    height: 35.75px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
 
+#dealer {
+    background-image: url(Dealer.png);
+}
+
+#smallblind {
+    background-image: url(smallblind.png);
+}
+
+#bigblind {
+    background-image: url(bigblind.png);
+}
 
 .background .a0 {
     left: 73%;
-    bottom: 5%;
+    top: -5%;
 }
 .background .a1 {
     left: 65%;
-    bottom: 5%;
+    top: -5%;
 }
 
 
 .background .a2 {
-    left: 35%;
-    bottom: 5%;
+    right: 0%;
+    top: 10%;
 }
 .background .a3 {
-    left: 27%;
-    bottom: 5%;
+    right: -8%;
+    top: 10%;
 }
 
 
 .background .a4 {
-    left: 8%;
-    bottom: 12%;
+    right: 0%;
+    bottom: 20%;
 }
 .background .a5 {
-    left: 0%;
-    bottom: 12%;
+    right: -8%;
+    bottom: 20%;
 }
-
 
 .background .a6 {
-    left: 8%;
-    top: 4%;
+    left: 73%;
+    bottom: 5%;
 }
 .background .a7 {
-    left: 0%;
-    top: 4%;
+    left: 65%;
+    bottom: 5%;
 }
 
 
 .background .a8 {
     left: 35%;
-    top: -4%;
+    bottom: 5%;
 }
 .background .a9 {
     left: 27%;
-    top: -4%;
+    bottom: 5%;
 }
 
 
 .background .a10 {
-    left: 73%;
-    top: -4%;
+    left: 0%;
+    bottom: 20%;
 }
 .background .a11 {
-    left: 65%;
-    top: -4%;
+    left: -8%;
+    bottom: 20%;
 }
 
 
 .background .a12 {
-    right: 8%;
-    top: 4%;
+    left: 0%;
+    top: 10%;
 }
 .background .a13 {
-    right: 0%;
-    top: 4%;
+    left: -8%;
+    top: 10%;
 }
 
 
 .background .a14 {
-    right: 8%;
-    bottom: 12%;
+    left: 35%;
+    top: -5%;
 }
 .background .a15 {
-    right: 0%;
-    bottom: 12%;
+    left: 27%;
+    top: -5%;
 }
 
+#money {
+    width: 50px;
+    height: 25px;
+    background-image: none;
+
+}
+
+.background .b0 {
+    left: 80%;
+    top: 0%;
+}
+
+.background .b1 {
+    left: 100%;
+    top: 25%;
+}
+
+.background .b2 {
+    left: 100%;
+    top: 80%;
+}
+
+.background .b3 {
+    left: 80%;
+    top: 90%;
+}
+
+.background .b4 {
+    left: 20%;
+    top: 90%;
+}
+
+.background .b5 {
+    left: -5%;
+    top: 80%;
+}
+
+.background .b6 {
+    left: -5%;
+    top: 25%;
+}
+
+.background .b7 {
+    left: 20%;
+    top: 0%;
+}

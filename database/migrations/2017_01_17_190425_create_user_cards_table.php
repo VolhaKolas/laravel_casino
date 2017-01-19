@@ -17,6 +17,7 @@ class CreateUserCardsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('card')->nullable();
+            $table->integer('user_place')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
