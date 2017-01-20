@@ -106,11 +106,11 @@ class TexasHoldemController extends Controller
 
         $smallBlind = $dealer + 1;
         $bigBlind = $dealer + 2;
-
-        
+        $firstBeter = $dealer + 3;
 
         if ($countPlayers == 2) {
             $smallBlind = $dealer;
+            $firstBeter = $smallBlind;
             if($dealer == 2) {
                 $bigBlind = 1;
             }
@@ -119,171 +119,74 @@ class TexasHoldemController extends Controller
             }
             $dealer = 0;
         }
+        else if ($countPlayers - $dealer == 2) {
+            $firstBeter = 1;
+        }
         else if($countPlayers - $dealer == 1) {
             $bigBlind = 1;
+            $firstBeter = 2;
         }
         else if ($countPlayers - $dealer == 0) {
             $smallBlind = 1;
             $bigBlind = 2;
+            $firstBeter = 3;
+        }
+
+        $tableMoney = Table_card::where('table_id', $table_id)->value('table_money');
+
+        if($tableMoney == null) {
+            $playerSB = User_card::where('user_place', $smallBlind)->value("user_id");
+            $playerBB = User_card::where('user_place', $bigBlind)->value("user_id");
+
+            Table_user::where('user_id', $playerSB)->decrement('money', 50);
+
+            Table_user::where('user_id', $playerBB)->decrement('money', 100);
+
+            Table_card::where('table_id', $table_id)->update([
+                "table_money" => 150
+            ]);
+
+            $tableMoney = Table_card::where('table_id', $table_id)->value('table_money');
         }
 
         switch($dealer) {
-            case 1: {
-                $leftD = 65;
-                $topD = 15;
-                break;
-            }
-            case 2:
-            {
-                $leftD = 80;
-                $topD = 20;
-                break;
-            }
-            case 3:
-             {
-                $leftD = 80;
-                $topD = 62;
-                break;
-            }
-            case 4:
-            {
-                $leftD = 65;
-                $topD = 67;
-                break;
-            }
-            case 5:
-            {
-                $leftD = 35;
-                $topD = 67;
-                break;
-            }
-            case 6:
-            {
-                $leftD = 15;
-                $topD = 62;
-                break;
-            }
-            case 7:
-            {
-                $leftD = 15;
-                $topD = 20;
-                break;
-            }
-            case 8:
-            {
-                $leftD = 35;
-                $topD = 15;
-                break;
-            }
+            case 1: { $leftD = 65; $topD = 15; break;}
+            case 2: { $leftD = 80; $topD = 20; break;}
+            case 3: { $leftD = 80; $topD = 62; break;}
+            case 4: { $leftD = 65; $topD = 67; break;}
+            case 5: { $leftD = 35; $topD = 67; break;}
+            case 6: { $leftD = 15; $topD = 62; break;}
+            case 7: { $leftD = 15; $topD = 20; break;}
+            case 8: { $leftD = 35; $topD = 15; break;}
         }
 
 
         switch($smallBlind) {
-            case 1:
-            {
-                $leftSB = 65;
-                $topSB = 15;
-                break;
-            }
-            case 2:
-            {
-                $leftSB = 80;
-                $topSB = 20;
-                break;
-            }
-            case 3:
-            {
-                $leftSB = 80;
-                $topSB = 62;
-                break;
-            }
-            case 4:
-            {
-                $leftSB = 65;
-                $topSB = 67;
-                break;
-            }
-            case 5:
-            {
-                $leftSB = 35;
-                $topSB = 67;
-                break;
-            }
-            case 6:
-            {
-                $leftD = 15;
-                $topD = 62;
-                break;
-            }
-            case 7:
-            {
-                $leftSB = 15;
-                $topSB = 20;
-                break;
-            }
-            case 8:
-            {
-                $leftSB = 35;
-                $topSB = 15;
-                break;
-            }
+            case 1: { $leftSB = 65; $topSB = 15; break;}
+            case 2: { $leftSB = 80; $topSB = 20; break;}
+            case 3: { $leftSB = 80; $topSB = 62; break;}
+            case 4: { $leftSB = 65; $topSB = 67; break;}
+            case 5: { $leftSB = 35; $topSB = 67; break;}
+            case 6: { $leftSB = 15; $topSB = 62; break;}
+            case 7: { $leftSB = 15; $topSB = 20; break;}
+            case 8: { $leftSB = 35; $topSB = 15; break;}
         }
 
         switch($bigBlind) {
-            case 1:
-            {
-                $leftBB = 65;
-                $topBB = 15;
-                break;
-            }
-            case 2:
-            {
-                $leftBB = 80;
-                $topBB = 20;
-                break;
-            }
-            case 3:
-            {
-                $leftBB = 80;
-                $topBB = 62;
-                break;
-            }
-            case 4:
-            {
-                $leftBB = 65;
-                $topBB = 67;
-                break;
-            }
-            case 5:
-            {
-                $leftBB = 35;
-                $topBB = 67;
-                break;
-            }
-            case 6:
-            {
-                $leftBB = 15;
-                $topBB = 62;
-                break;
-            }
-            case 7:
-            {
-                $leftBB = 15;
-                $topBB = 20;
-                break;
-            }
-            case 8:
-            {
-                $leftBB = 35;
-                $topBB = 15;
-                break;
-            }
+            case 1: { $leftBB = 65; $topBB = 15; break;}
+            case 2: { $leftBB = 80; $topBB = 20; break;}
+            case 3: { $leftBB = 80; $topBB = 62; break;}
+            case 4: { $leftBB = 65; $topBB = 67; break;}
+            case 5: { $leftBB = 35; $topBB = 67; break;}
+            case 6: { $leftBB = 15; $topBB = 62; break;}
+            case 7: { $leftBB = 15; $topBB = 20; break;}
+            case 8: { $leftBB = 35; $topBB = 15; break;}
         }
 
 
 
         return view('holdem.holdem', compact('cards', 'numberOfPlayers', 'key', 'leftD', 'topD',
-            'leftSB', 'topSB', 'leftBB', 'topBB'));
+            'leftSB', 'topSB', 'leftBB', 'topBB', 'tableMoney', 'firstBeter'));
     }
 
 

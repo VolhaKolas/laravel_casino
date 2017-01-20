@@ -14,20 +14,23 @@
     width: 687.5px;
     height: 453.5px;
     margin: auto;
-    background-image: url(pokerTable.png);
+    background-image: url("pokerTable.png");
     background-repeat: no-repeat;
     background-size: 100%;
     position: relative;
 }
 .background div {
     position: absolute;
-    background-image: url(koloda.png);
-    width: 44px;
-    height: 65.6px;
     background-repeat: no-repeat;
     background-position: 0% 100%;
 }
-
+.background .a0, .background .a1, .background .a2, .background .a3, .background .a4,
+.background .a5, .background .a6, .background .a7, .background .a8, .background .a9,
+.background .a10,  .background .a11, .background .a12, .background .a13, .background .a14, .background .a15 {
+    background-image: url("koloda.png");
+    width: 44px;
+    height: 65.6px;
+}
 
 #dealer, #smallblind, #bigblind  {
     position: absolute;
@@ -38,15 +41,15 @@
 }
 
 #dealer {
-    background-image: url(Dealer.png);
+    background-image: url("Dealer.png");
 }
 
 #smallblind {
-    background-image: url(smallblind.png);
+    background-image: url("smallblind.png");
 }
 
 #bigblind {
-    background-image: url(bigblind.png);
+    background-image: url("bigblind.png");
 }
 
 .background .a0 {
@@ -127,49 +130,104 @@
     top: -5%;
 }
 
-#money {
-    width: 50px;
-    height: 25px;
+#b0, #b1, #b2, #b3, #b4, #b5, #b6, #b7 {
+    width: 150px;
+    height: 50px;
     background-image: none;
-
 }
 
-.background .b0 {
+#b0 .money, #b1 .money, #b2 .money, #b3 .money, #b4 .money, #b5 .money, #b6 .money, #b7 .money {
+    width: 120px;
+    height: 20px;
+    float: left;
+}
+#b0 .user, #b1 .user, #b2 .user, #b3 .user, #b4 .user, #b5 .user, #b6 .user, #b7 .user {
+    margin-top: 15px;
+    width: 120px;
+    height: 20px;
+    float: left;
+}
+
+#b0 {
     left: 80%;
     top: 0%;
 }
 
-.background .b1 {
+#b1 {
     left: 100%;
     top: 25%;
 }
 
-.background .b2 {
+#b2 {
     left: 100%;
     top: 80%;
 }
 
-.background .b3 {
+#b3 {
     left: 80%;
     top: 90%;
 }
 
-.background .b4 {
+#b4 {
     left: 20%;
     top: 90%;
 }
 
-.background .b5 {
+#b5 {
     left: -5%;
     top: 80%;
 }
 
-.background .b6 {
+#b6 {
     left: -5%;
     top: 25%;
 }
 
-.background .b7 {
+#b7 {
     left: 20%;
     top: 0%;
 }
+
+.tableChip {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url("fishka.png");
+    top: 32%;
+    left: 45%;
+}
+.tableMoney {
+    top: 32%;
+    left: 50%;
+    color: red;
+}
+
+#bet, #waiting {
+    position: fixed;
+    width: 200px;
+    height: 120px;
+    top: 30%;
+    left: 40%;
+    background-color: rgba(255, 250, 250, 0.8);;
+    border: black 2px solid;
+    border-radius: 5px;
+    box-shadow: #0d3625 1px 1px 1px 1px;
+}
+
+#bet div {
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+#bet button {
+    margin-top: 5px;
+    margin-left: 40px;
+}
+
+#waiting {
+    height: 50px;
+}
+
+
