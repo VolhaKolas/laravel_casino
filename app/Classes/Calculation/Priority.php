@@ -1,13 +1,19 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: olgakolos
+ * Date: 21.01.17
+ * Time: 21:02
+ */
 
-namespace App;
+namespace App\Classes\Calculation;
 
-use App\Couples;
-use App\Flush;
-use App\Straight;
-use Illuminate\Database\Eloquent\Model;
 
-class Priority extends Model
+use App\Classes\Calculation\Couples;
+use App\Classes\Calculation\Flush;
+use App\Classes\Calculation\Straight;
+
+class Priority
 {
     /*combination's priority:
 straight flash - 1e+16
@@ -83,4 +89,5 @@ pair - 1e+2
         }
         return $commonResult;
     }
+
 }

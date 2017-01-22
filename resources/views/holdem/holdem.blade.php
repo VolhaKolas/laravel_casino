@@ -6,19 +6,18 @@
 
 
     <div class="background">
-
         <!-- Dealer chip-->
-        @if(isset($leftD))
-        <div id="dealer" style="left: {{$leftD}}%; top: {{$topD}}%">
+        @if(isset($dealer))
+        <div id="dealer" style="left: {{\App\Classes\Position\Position::left($dealer)}}%; top: {{\App\Classes\Position\Position::top($dealer)}}%">
         </div>
         @endif
 
     <!-- Small blind chip-->
-        <div id="smallblind" style="left: {{$leftSB}}%; top: {{$topSB}}%">
+        <div id="smallblind" style="left: {{\App\Classes\Position\Position::left($smallBlind)}}%; top: {{\App\Classes\Position\Position::top($smallBlind)}}%">
         </div>
 
         <!-- Big blind chip-->
-        <div id="bigblind" style="left: {{$leftBB}}%; top: {{$topBB}}%">
+        <div id="bigblind" style="left: {{\App\Classes\Position\Position::left($bigBlind)}}%; top: {{\App\Classes\Position\Position::top($bigBlind)}}%">
         </div>
 
             @for($i = 0; $i < $numberOfPlayers * 2; $i++ )
@@ -30,13 +29,13 @@
             ?>
 
             <!-- First player's card -->
-                @if($i == $key * 2)
-                    <div class="a{{$i}}" style="background-position: {{($cards[0] % 100 - 2) * 100/12}}% {{25 * (round($cards[0]/100))}}%">
+                @if($i == auth()->user()->userCards[0]->user_place * 2 - 2)
+                    <div class="a{{$i}}" style="background-position: {{(auth()->user()->userCards[0]->card % 100 - 2) * 100/12}}% {{25 * (round(auth()->user()->userCards[0]->card/100))}}%">
                     </div>
 
                     <!-- Second player's card -->
-                @elseif($i == $key * 2 + 1)
-                <div class="a{{$i}}" style="background-position: {{($cards[1] % 100 - 2) * 100/12}}% {{25 * (round($cards[1]/100))}}%">
+                @elseif($i == auth()->user()->userCards[0]->user_place * 2 - 1)
+                <div class="a{{$i}}" style="background-position: {{(auth()->user()->userCards[1]->card % 100 - 2) * 100/12}}% {{25 * (round(auth()->user()->userCards[1]->card/100))}}%">
                 </div>
 
                     <!-- Cards of another players -->
@@ -62,51 +61,76 @@
         <div class="tableChip">
         </div>
         <div class="tableMoney">
-            {{$tableMoney}}$
+            {{auth()->user()->tableUsers->tableCards->table_money}}$
         </div>
      </div>
 
-        @if($key + 1 == $firstBeter)
+        @if(auth()->user()->userCards[0]->user_place == $firstBeter)
             <div id="bet">
-                <form action="{{ route('pregame')  }}" method="post">
+                <form action="{{ route('choice')  }}" method="post">
                     {{ csrf_field() }}
                     <div>
-                        <input type="checkbox">
+                        <input type="checkbox" id="call">
                         <b>Принять ставку 100$</b>
                     </div>
                     <div>
-                        <input type="checkbox">
+                        <input type="checkbox" id="raise">
                         <b>Поднять ставку на 100$</b>
                     </div>
                     <div>
-                        <input type="checkbox">
+                        <input type="checkbox" id="fold">
                         <b>Сбросить карты</b>
                     </div>
-                    <button class="btn btn-primary">Выбрать</button>
+                    <button class="btn btn-primary" onclick="send()">Выбрать</button>
                 </form>
             </div>
         @else
             <div id="waiting">
-                <?php $user_id = \App\User_card::where('user_place', $firstBeter)->value('user_id')?>
-                Ожидание игрока {{\App\User::where('id', $user_id)->value('name')}} {{\App\User::where('id', $user_id)->value('surname')}}
+                Ожидание игрока {{\App\User::where('id', $firstBeterId)->value('name')}} {{\App\User::where('id', $firstBeterId)->value('surname')}}
             </div>
         @endif
 
 
-<button onclick="send()">Send</button>
 
     <script>
-        var conn = new WebSocket("ws://localhost:8080");
 
-        conn.onmessage = function (e) {
-            console.log("Полученные данные: " + e.data);
-        }
+            var check = document.querySelectorAll("[type='checkbox']");
+            for(var j = 0 ; j < check.length; j++) {
+                check[j].onclick = function () {
+                    for(var i = 0; i < check.length; i++) {
+                        if(check[i] == this) {
+                            check[i].checked = 'checked';
+                            check[i].setAttribute('checked', 'checked');
+                        }
+                        else {
+                            check[i].checked = '';
+                            check[i].setAttribute('checked', 'false');
+                        }
+                    }
+                }
 
-        function send() {
-            var data = "Данные для отправки: " + "Hello";
-            conn.send(data);
-            console.log("Отправлено: " + data);
-        }
+            }
+
+
+            var conn = new WebSocket("ws://localhost:8080");
+
+            conn.onmessage = function (e) {
+                console.log("Полученные данные: " + e.data);
+            }
+
+            function send() {
+
+
+
+                for(var a = 0; a < check.length; a++) {
+                    if(check[a].getAttribute('checked') != 'false') {
+                        var choice = check[a].id;
+                    }
+                }
+                conn.send(choice);
+            }
+
+
 
     </script>
 

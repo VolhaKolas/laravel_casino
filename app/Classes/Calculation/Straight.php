@@ -1,10 +1,15 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: olgakolos
+ * Date: 21.01.17
+ * Time: 21:00
+ */
 
-namespace App;
+namespace App\Classes\Calculation;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Straight extends Model
+class Straight
 {
     /*combination's priority:
 straight flash - 1e+16

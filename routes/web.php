@@ -15,6 +15,8 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->get('/deleteUser', ['uses'=>"PreGameController@deleteUser", 'as'=>'deleteUser']);
 
     $router->get('/texas', ['uses' => 'TexasHoldemController@game', 'as' => 'texas'])->middleware('texas');
+
+    $router->post('/choice', ['uses'=>"ChoiceController@choice", 'as'=>'choice']);
 });
 
 Auth::routes();

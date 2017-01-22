@@ -10,4 +10,8 @@ class User_card extends Model
         'user_id', 'card', 'user_place'
     ];
     public $timestamps = false;
+
+    public function users() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

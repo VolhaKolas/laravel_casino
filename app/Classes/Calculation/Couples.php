@@ -1,10 +1,7 @@
 <?php
+namespace App\Classes\Calculation;
 
-namespace App;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Couples extends Model
+final class Couples
 {
     /*combination's priority:
 straight flash - 1e+16

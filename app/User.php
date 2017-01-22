@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Table_user;
+use App\User_card;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,5 +28,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function tableUsers() {
+        return $this->hasOne(Table_user::class);
+    }
+
+    public function userCards() {
+        return $this->hasMany(User_card::class);
+    }
 
 }

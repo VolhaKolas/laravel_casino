@@ -1,11 +1,17 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: olgakolos
+ * Date: 21.01.17
+ * Time: 20:57
+ */
 
-namespace App;
+namespace App\Classes\Calculation;
 
-use App\Straight;
-use Illuminate\Database\Eloquent\Model;
 
-class Flush extends Model
+use App\Classes\Calculation\Straight;
+
+final class Flush
 {
     /*combination's priority:
 straight flash - 1e+16
