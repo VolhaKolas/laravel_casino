@@ -59,6 +59,7 @@ class Blinds
         }
 
 
+
         /*
          * Here we take money from SB user and BB user and put this money on the table
          */
