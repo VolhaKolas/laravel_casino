@@ -16,6 +16,8 @@ Route::group(['middleware' => ['auth']], function($router) {
 
     $router->get('/texas', ['uses' => 'TexasHoldemController@game', 'as' => 'texas'])->middleware('texas');
 
+    $router->get('/cards', ['uses'=>"CardsController@cards", 'as'=>'cards']);
+    $router->get('/reload', ['uses'=>"ReloadController@reload", 'as'=>'reload']);
     $router->post('/choice', ['uses'=>"ChoiceController@choice", 'as'=>'choice']);
 });
 
