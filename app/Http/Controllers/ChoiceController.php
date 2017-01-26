@@ -86,48 +86,6 @@ class ChoiceController extends Controller
                     ]);
                 }
             }
-
-            /*for ($i = 0; $i < count($players); $i++) {
-                $currentBeter = User_card::where('user_id', $players[$i])->value('current_bet');
-                $userPlace = User_card::where('user_id', $players[$i])->value('user_place');
-                User_card::where('user_id', $players[$i])->update([
-                    'current_bet' => 0
-                ]);
-                if ($currentBeter == 1) {
-                    $nextPlace = $userPlace + 1;
-                    if ($numberOfPlayers - $userPlace == 0) {
-                        $nextPlace = 1;
-                    }
-                }
-            }
-
-            $users = [];
-            foreach ($players as $player) {
-               if(User_card::where('user_id', $player)->value('card') != null) {
-                   $users = array_merge($users, [$player]);
-               }
-            }
-
-            if($numberOfPlayers != count($users)) {
-                for ($j = 0; $j < count($users); $j++) {
-                    $userPlace = User_card::where('user_id', $users[$j])->value('user_place');
-                    if ($userPlace == $nextPlace) {
-                        $folder = User_card::where('user_id', $users[$j])->value('card');
-                        if ($folder == null) {
-                            if (count($users) - $nextPlace == 0) {
-                                $nextPlace = 1;
-                                $j = 0;
-                            } else {
-                                $nextPlace = $nextPlace + 1;
-                            }
-                        } else {
-                            User_card::where('user_id', $users[$j])->update([
-                                'current_bet' => 1
-                            ]);
-                        }
-                    }
-                }
-            }*/
         }
 
 
