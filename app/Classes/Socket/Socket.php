@@ -25,7 +25,6 @@ class Socket extends BaseSocket
     {
         $numRecv = count($this->clients) - 1;
 
-        echo "Hello";
 
         foreach ($this->clients as $client) {
             if($from !== $client) {

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Table_user extends Model
 {
     protected $fillable = [
-        'table_id', 'user_id', 'money'
+        'table_id', 'user_id', 'money', 'bet'
     ];
     public $timestamps = false;
 

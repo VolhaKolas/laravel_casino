@@ -15,6 +15,7 @@ class AddColumnHandCardsTableCardsMoneyTableMoneyTimer extends Migration
     {
         Schema::table('table_users', function ($table) {
             $table->integer('money')->nullable();
+            $table->integer('bet')->default(0);
         });
     }
 
@@ -27,7 +28,7 @@ class AddColumnHandCardsTableCardsMoneyTableMoneyTimer extends Migration
     {
         Schema::table('table_users', function ($table) {
             $table->dropColumn(['money']);
-
+            $table->dropColumn(['bet']);
         });
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Table_card extends Model
 {
     protected $fillable = [
-        'table_id', 'table_money', 'flop1', 'flop2', 'flop3', 'turn', 'river'
+        'table_id', 'table_money', 'flop1', 'flop2', 'flop3', 'turn', 'river', 'flop_open', 'turn_open', 'river_open'
     ];
     public $timestamps = false;
 

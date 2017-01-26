@@ -26,7 +26,9 @@
 }
 .background .a0, .background .a1, .background .a2, .background .a3, .background .a4,
 .background .a5, .background .a6, .background .a7, .background .a8, .background .a9,
-.background .a10,  .background .a11, .background .a12, .background .a13, .background .a14, .background .a15 {
+.background .a10,  .background .a11, .background .a12, .background .a13, .background .a14, .background .a15,
+.background .t0, .background .t1, .background .t2, .background .t3, .background .t4
+{
     background-image: url("koloda.png");
     width: 44px;
     height: 65.6px;
@@ -132,6 +134,28 @@
     top: -5%;
 }
 
+
+.background .t0 {
+    left: 30%;
+    top: 40%;
+}
+.background .t1 {
+    left: 37%;
+    top: 40%;
+}
+.background .t2 {
+    left: 44%;
+    top: 40%;
+}
+.background .t3 {
+    left: 51%;
+    top: 40%;
+}
+.background .t4 {
+    left: 58%;
+    top: 40%;
+}
+
 #b0, #b1, #b2, #b3, #b4, #b5, #b6, #b7 {
     width: 150px;
     height: 50px;
@@ -208,7 +232,7 @@
 
 #bet, #waiting {
     position: fixed;
-    width: 200px;
+    width: 240px;
     height: 120px;
     top: 30%;
     left: 40%;

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class User_card extends Model
 {
     protected $fillable = [
-        'user_id', 'card', 'user_place'
+        'user_id', 'card', 'user_place', 'dealer', 'current_bet'
     ];
     public $timestamps = false;
 

@@ -43,6 +43,7 @@ class Blinds
             else {
                 $bigBlind = 2;
             }
+            $dealer = 0;
         }
         //here we create correct position if dealer position is the last or on end of list
         else if ($numberOfPlayers - $dealer == 2) {
@@ -78,6 +79,7 @@ class Blinds
                 "table_money" => 150
             ]);
         }*/
+
         return([$dealer, $smallBlind, $bigBlind, $firstBeter]);
 
     }
