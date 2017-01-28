@@ -89,12 +89,7 @@ class TexasHoldemController extends Controller
                 ]);
                 $smallBlind = Blinds::blinds()[1];
                 $bigBlind = Blinds::blinds()[2];
-                User_card::where('user_place', $smallBlind)->update([
-                    'dealer' => 2
-                ]);
-                User_card::where('user_place', $bigBlind)->update([
-                    'dealer' => 3
-                ]);
+
             }
 
         }

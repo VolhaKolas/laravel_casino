@@ -12,6 +12,7 @@ class CardsController extends Controller
 
         $data = $request->all();
 
+        //this 'if' for creation cards only by one player. We may use another ways for determine this user
         if(Table_user::where('table_id', auth()->user()->tableUsers->table_id)->min('id') == Table_user::where('user_id', auth()->id())->value('id')) {
             $table_id = auth()->user()->tableUsers->table_id;//current table
             $players = Table_user::where('table_id', $table_id)->pluck("user_id"); //all game players
@@ -77,6 +78,12 @@ class CardsController extends Controller
                     if ($user_place == $smallBlind) {
                         Table_user::where('user_id', $user)->decrement('money', $bet / 2);
                         Table_user::where('user_id', $user)->increment('bet', $bet / 2);
+
+                        if($numberOfPlayers == 2) {
+                            \App\User_card::where('user_id', $user)->update([
+                                'current_bet' => 1
+                            ]);
+                        }
                     } else if ($user_place == $bigBlind) {
                         Table_user::where('user_id', $user)->decrement('money', $bet);
                         Table_user::where('user_id', $user)->increment('bet', $bet);

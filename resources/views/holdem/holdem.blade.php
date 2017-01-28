@@ -12,7 +12,7 @@
                 <div id="dealer" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[0])}}%;
                         top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[0])}}%">
                 </div>
-                @endif
+
 
 
                 <!-- Small blind chip-->
@@ -25,6 +25,18 @@
                 <div id="bigblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[2])}}%;
                         top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[2])}}%">
                 </div>
+                @else
+                <!-- Small blind chip-->
+                    <div id="smallblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[1])}}%;
+                            top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[1])}}%">
+
+                    </div>
+
+                    <!-- Big blind chip-->
+                    <div id="bigblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[2])}}%;
+                            top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[2])}}%">
+                    </div>
+                @endif
 
 
                     @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)
@@ -76,12 +88,11 @@
 
         @elseif(\App\User_card::where('user_id', auth()->id())->count() == 2)
             <div class="background">
-                    <!-- Dealer chip-->
+                <!-- Dealer chip-->
                 @if(\App\Classes\Position\Blinds::blinds()[0] != 0)
                     <div id="dealer" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[0])}}%;
                             top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[0])}}%">
                     </div>
-                @endif
 
                     <!-- Small blind chip-->
                     <div id="smallblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[1])}}%;
@@ -89,10 +100,22 @@
 
                     </div>
 
-                        <!-- Big blind chip-->
-                        <div id="bigblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[2])}}%;
-                                top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[2])}}%">
-                        </div>
+                    <!-- Big blind chip-->
+                    <div id="bigblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[2])}}%;
+                            top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[2])}}%">
+                    </div>
+                @else
+                <!-- Small blind chip-->
+                    <div id="smallblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[1])}}%;
+                            top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[1])}}%">
+
+                    </div>
+
+                    <!-- Big blind chip-->
+                    <div id="bigblind" style="left: {{\App\Classes\Position\Position::left(\App\Classes\Position\Blinds::blinds()[2])}}%;
+                            top: {{\App\Classes\Position\Position::top(\App\Classes\Position\Blinds::blinds()[2])}}%">
+                    </div>
+                @endif
 
 
                         @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)

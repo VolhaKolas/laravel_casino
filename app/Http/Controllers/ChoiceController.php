@@ -89,12 +89,6 @@ class ChoiceController extends Controller
                 if(User_card::where('user_id', $player)->value('last_bet') == 1) {
                     $lastBeter = $player;
                 }
-                if(User_card::where('user_id', $player)->value('dealer') != 2) {
-                    $smallBlindUser = $player;
-                }
-                if(User_card::where('user_id', $player)->value('dealer') != 3) {
-                    $bigBlindUser = $player;
-                }
             }
 
             foreach ($users as $user) {

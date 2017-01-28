@@ -17,6 +17,7 @@ class Position
             case 6: { $left = 15; break;}
             case 7: { $left = 15; break;}
             case 8: { $left = 35; break;}
+
         }
         return $left;
     }
@@ -31,6 +32,7 @@ class Position
             case 6: { $top = 62; break;}
             case 7: { $top = 20; break;}
             case 8: { $top = 15; break;}
+
         }
         return $top;
     }
