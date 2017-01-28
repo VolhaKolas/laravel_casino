@@ -4,7 +4,6 @@
 @section('content')
 
 
-
     @if(isset(\App\Classes\Position\Blinds::blinds()[0]))
         @if(\App\User_card::where('user_id', auth()->id())->count() == 1)
             <div class="background">
@@ -273,7 +272,6 @@
                             if (check[i] == this) {
                                 check[i].checked = 'checked';
                                 check[i].setAttribute('checked', 'checked');
-                                //$('#answer').val(check[i].next().next().text());
                             }
                             else {
                                 check[i].checked = '';

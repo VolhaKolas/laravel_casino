@@ -59,27 +59,6 @@ class Blinds
             $firstBeter = 3;
         }
 
-
-
-        /*
-         * Here we take money from SB user and BB user and put this money on the table
-         */
-
-        /*$tableMoney = auth()->user()->tableUsers->tableCards->table_money;
-
-        if($tableMoney == null) { // this for don't take and put money more than one time
-            $playerSB = User_card::where('user_place', $smallBlind)->value("user_id");
-            $playerBB = User_card::where('user_place', $bigBlind)->value("user_id");
-
-            Table_user::where('user_id', $playerSB)->decrement('money', 50);
-
-            Table_user::where('user_id', $playerBB)->decrement('money', 100);
-
-            Table_card::where('table_id', $table_id)->update([
-                "table_money" => 150
-            ]);
-        }*/
-
         return([$dealer, $smallBlind, $bigBlind, $firstBeter]);
 
     }
