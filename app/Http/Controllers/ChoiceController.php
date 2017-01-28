@@ -96,14 +96,14 @@ class ChoiceController extends Controller
                     $bigBlindUser = $player;
                 }
             }
-            $minBet = Table_user::where('table_id', $table_id)->min('bet');
+
             foreach ($users as $user) {
-                if($minBet != $maxBet) {
+                if(Table_user::where('user_id', $user)->value("bet") < $maxBet) {
                     $minBet = Table_user::where('user_id', $user)->value("bet");
                 }
-                else {
-                    $minBet = Table_user::where('user_id', $user)->value("bet");
-                }
+            }
+            if(!isset($minBet)) {
+                $minBet = Table_user::where('table_id', $table_id)->max('bet');
             }
 
 
