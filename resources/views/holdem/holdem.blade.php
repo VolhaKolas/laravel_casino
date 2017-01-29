@@ -2,9 +2,9 @@
 @extends('layouts.main')
 
 @section('content')
-    <?php if(isset($priorityArray)) {
-        var_dump($priorityArray);
-    }?>
+
+
+
 
     @if(isset(\App\Classes\Position\Blinds::blinds()[0]) and \App\Classes\Position\Blinds::blinds()[1] != 0)
         @if(\App\User_card::where('user_id', auth()->id())->count() == 1)

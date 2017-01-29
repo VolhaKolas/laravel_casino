@@ -166,11 +166,34 @@ class ChoiceController extends Controller
                             ]);
                             $priority = \App\Classes\Calculation\Priority::priority($cards);
                             $priorityArray = array_merge($priorityArray, [
-                                $player => $priority
+                                ["id" => $player, "priority" => $priority]
                             ]);
                         }
                     }
-                    arsort($priorityArray);
+
+
+                    $maxPriority = 0;
+                    $winers = [];
+                    foreach ($priorityArray as $pa) {
+                        if($pa['priority'] > $maxPriority) {
+                            $maxPriority = $pa['priority'];
+                        }
+                    }
+
+                    foreach ($priorityArray as $pa) {
+                        if($pa['priority'] == $maxPriority) {
+                            $winers = array_merge($winers, [$pa['id']]);
+                        }
+                    }
+
+
+                    $bank = Table_card::where('table_id', $table_id)->value('table_money');
+                    $givenMoney = $bank/count($winers);
+                    foreach ($winers as $winer) {
+                        Table_user::where('user_id', $winer)->increment('money', $givenMoney);
+                    }
+                    Table_card::where('table_id', $table_id)->decrement('table_money', $bank);
+
 
                 }
                 else if (Table_card::where('table_id', $table_id)->value('flop_open') == 1
@@ -265,6 +288,5 @@ class ChoiceController extends Controller
                 }
             }
         }
-        return view('holdem.holdem', compact('priorityArray'));
     }
 }
