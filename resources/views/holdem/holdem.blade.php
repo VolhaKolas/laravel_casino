@@ -2,9 +2,11 @@
 @extends('layouts.main')
 
 @section('content')
+    <?php if(isset($priorityArray)) {
+        var_dump($priorityArray);
+    }?>
 
-
-    @if(isset(\App\Classes\Position\Blinds::blinds()[0]))
+    @if(isset(\App\Classes\Position\Blinds::blinds()[0]) and \App\Classes\Position\Blinds::blinds()[1] != 0)
         @if(\App\User_card::where('user_id', auth()->id())->count() == 1)
             <div class="background">
                     <!-- Dealer chip-->
@@ -39,21 +41,22 @@
                 @endif
 
 
-                    @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)
-                        <div class="a{{($i - 1) * 2}}" style=" background-position: {{(\App\User_card::where('user_place', $i)->pluck('card')[0] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_place', $i)->pluck('card')[0]/100))}}%">
+                @foreach(\App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->pluck('user_id') as $users)
+                    <?php $user = \App\User_card::where('user_id', $users)->value('user_place') ?>
+                        <div class="a{{($user - 1) * 2}}" style=" background-position: {{(\App\User_card::where('user_id', $users)->pluck('card')[0] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_id', $users)->pluck('card')[0]/100))}}%">
                         </div>
 
-                        <div id="b{{$i - 1}}">
+                        <div id="b{{$user - 1}}">
                             <div class="user">
-                                {{ \App\User::where('id', \App\User_card::where('user_place', $i)->value('user_id'))->value('name') }}
-                                {{ \App\User::where('id', \App\User_card::where('user_place', $i)->value('user_id'))->value('surname') }}
+                                {{ \App\User::where('id', $users)->value('name') }}
+                                {{ \App\User::where('id', $users)->value('surname') }}
                             </div>
 
                             <div class="money">
-                                {{\App\Table_user::where('id', \App\User_card::where('user_place', $i)->value('user_id'))->value('money')}}$
+                                {{\App\Table_user::where('id', $users)->value('money')}}$
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
             </div>
             <script>
                 @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)
@@ -118,40 +121,43 @@
                 @endif
 
 
-                        @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)
 
-                            @if(\App\User_card::where('user_place', $i)->value('card') != null)
-                            @if(\App\User_card::where('user_place', $i)->value('user_id') == auth()->id())
+
+                        @foreach(\App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->pluck('user_id') as $users)
+                            <?php $user = \App\User_card::where('user_id', $users)->value('user_place') ?>
+
+                            @if(\App\User_card::where('user_id', $users)->value('card') != null)
+                            @if($users == auth()->id())
 
                                     <!-- First player's card -->
-                                    <div class="a{{($i - 1) * 2}}" style=" background-position: {{(\App\User_card::where('user_place', $i)->pluck('card')[0] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_place', $i)->pluck('card')[0]/100))}}%">
+                                    <div class="a{{($user - 1) * 2}}" style=" background-position: {{(\App\User_card::where('user_id', $users)->pluck('card')[0] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_id', $users)->pluck('card')[0]/100))}}%">
                                     </div>
 
                                     <!-- Second player's card -->
-                                    <div class="a{{$i + ($i - 1)}}" style=" background-position: {{(\App\User_card::where('user_place', $i)->pluck('card')[1] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_place', $i)->pluck('card')[1]/100))}}%">
+                                    <div class="a{{$user + ($user - 1)}}" style=" background-position: {{(\App\User_card::where('user_id', $users)->pluck('card')[1] % 100 - 2) * 100/12}}% {{25 * (round(\App\User_card::where('user_id', $users)->pluck('card')[1]/100))}}%">
                                     </div>
                             @else
                                 <!-- Cards of other players -->
-                                    <div class="a{{($i - 1) * 2}}">
+                                    <div class="a{{($user - 1) * 2}}">
                                     </div>
 
-                                    <div class="a{{$i + ($i - 1)}}">
+                                    <div class="a{{$user + ($user - 1)}}">
                                     </div>
                                 @endif
                             @endif
 
 
-                            <div id="b{{$i - 1}}">
+                            <div id="b{{$user - 1}}">
                                 <div class="user">
-                                    {{ \App\User::where('id', \App\User_card::where('user_place', $i)->value('user_id'))->value('name') }} <!--  correct this because you will have trouble when more than one tables be in play-->
-                                    {{ \App\User::where('id', \App\User_card::where('user_place', $i)->value('user_id'))->value('surname') }}
+                                    {{ \App\User::where('id', $users)->value('name') }} <!--  correct this because you will have trouble when more than one tables be in play-->
+                                    {{ \App\User::where('id', $users)->value('surname') }}
                                 </div>
 
                                 <div class="money">
-                                    {{\App\Table_user::where('user_id', \App\User_card::where('user_place', $i)->value('user_id'))->value('money')}}$
+                                    {{\App\Table_user::where('user_id', $users)->value('money')}}$
                                 </div>
                             </div>
-                        @endfor
+                        @endforeach
 
 
                     @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop_open') == 1)
@@ -179,7 +185,6 @@
                 <div class="tableMoney">
                     {{auth()->user()->tableUsers->tableCards->table_money}}$
                 </div>
-
             </div>
 
 
@@ -226,7 +231,7 @@
                             </div>
                         @endif
                         <input type="hidden" name="answer" id="answer" value="">
-                        <button class="btn btn-primary" onclick="send()">Выбрать</button>
+                        <button class="btn btn-success" onclick="send()">Выбрать</button>
                     </form>
                 </div>
 
@@ -235,8 +240,12 @@
 
                 <div id="waiting">
                     Ожидание игрока
-                    {{\App\User::where('id', \App\User_card::where('current_bet', 1)->value('user_id'))->value('name')}}
-                    {{\App\User::where('id', \App\User_card::where('current_bet', 1)->value('user_id'))->value('surname')}}
+                    @foreach(\App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->pluck('user_id') as $users)
+                        @if(\App\User_card::where('user_id', $users)->value('current_bet') == 1)
+                            {{\App\User::where('id', $users)->value('name')}}
+                            {{\App\User::where('id', $users)->value('surname')}}
+                        @endif
+                    @endforeach
                 </div>
             @endif
 
@@ -321,6 +330,7 @@
                         window.location.href = "/texas";
                     }
                 });
+
 
                 conn.send('hello');
             }

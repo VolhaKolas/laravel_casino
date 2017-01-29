@@ -221,11 +221,11 @@
     background-repeat: no-repeat;
     background-size: 100%;
     background-image: url("fishka.png");
-    top: 32%;
+    top: 30%;
     left: 45%;
 }
 .tableMoney {
-    top: 32%;
+    top: 30%;
     left: 50%;
     color: red;
 }
@@ -234,9 +234,9 @@
     position: fixed;
     width: 240px;
     height: 120px;
-    top: 30%;
+    top: 40%;
     left: 40%;
-    background-color: rgba(255, 250, 250, 0.8);;
+    background-color: rgba(255, 250, 250, 0.7);;
     border: black 2px solid;
     border-radius: 5px;
     box-shadow: #0d3625 1px 1px 1px 1px;
@@ -256,5 +256,6 @@
 #waiting {
     height: 50px;
 }
+
 
 

@@ -27,7 +27,7 @@ pair - 1e+2
 */
 
 
-    final public static function priority($array) {
+    final public static function priority( array $array) {
         $common = array_slice($array, -5, 5); // this array we put on the table(common array)
         $array = array_slice($array, 0, -5); //this array we give on hands
         $commonResult = []; //on this array we put all result calculation

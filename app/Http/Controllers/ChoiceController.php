@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ChoiceController extends Controller
 {
+
+    private static function nextBetter() {
+
+    }
+
     public function choice(ChoiceRequest $request) {
 
         $data = $request->input('answer'); //value of current user bet
@@ -17,6 +22,8 @@ class ChoiceController extends Controller
         $players = Table_user::where('table_id', $table_id)->pluck("user_id"); //all game players
         $numberOfPlayers = count($players); //count of players
         $maxBet = Table_user::where('table_id', $table_id)->max('bet');
+        $smallBlind = \App\Classes\Position\Blinds::blinds()[1];
+        $bigBlind = \App\Classes\Position\Blinds::blinds()[2];
 
         if(User_card::where('user_id', auth()->id())->value('current_bet') == 1) { // this 'if' have done for insurance. Only person with current_bet = 1 can make a bet
             $userPlace = User_card::where('user_id', auth()->id())->value('user_place');
@@ -31,6 +38,13 @@ class ChoiceController extends Controller
                 if(User_card::where('user_id', $p)->value('card') != null) {
                     $allAvailablePlaces = array_merge($allAvailablePlaces, [$currentUserPlace]);
                 }
+
+                if($currentUserPlace == $smallBlind) {
+                    $smallBlindId = $p;
+                }
+                if($currentUserPlace == $bigBlind) {
+                    $bigBlindId = $p;
+                }
             }
 
             sort($allAvailablePlaces);
@@ -43,6 +57,19 @@ class ChoiceController extends Controller
                     else {
                         $nextPlace = $allAvailablePlaces[$i + 1];
                     }
+                }
+            }
+
+
+            if(!isset($nextPlace)) {
+                if(User_card::where('user_id', $smallBlindId)->value('card') != null) {
+                    $nextPlace = $smallBlind;
+                }
+                else if (User_card::where('user_id', $bigBlindId)->value('card') != null) {
+                    $nextPlace = $bigBlind;
+                }
+                else {
+                    $nextPlace = $allAvailablePlaces[0];
                 }
             }
 
@@ -102,14 +129,43 @@ class ChoiceController extends Controller
 
 
             /*
-             * if user's bets are equal and current better is who has bigBlind on preflop and smallBlind on flop, turn and river
-             * or current better is who increase bet
+             * if user's bets are equal and current better is who has bigBlind on preflop and smallBlind on flop, turn, river or who increase the bet
              * We open river, turn, flop cards
              */
 
 
             if($maxBet == $minBet and $lastBeter == auth()->id()) {
-                if (Table_card::where('table_id', $table_id)->value('flop_open') == 1 and Table_card::where('table_id', $table_id)->value('turn_open') == 1) {
+                if (Table_card::where('table_id', $table_id)->value('flop_open') == 1
+                    and Table_card::where('table_id', $table_id)->value('turn_open') == 1
+                    and Table_card::where('table_id', $table_id)->value('river_open') == 1) {
+
+                    //final calculations
+
+                    $priorityArray = [];
+                    foreach ($players as $player) {
+                        if(User_card::where('user_id', $player)->value('card') != null) {
+                            $cards = [];
+                            foreach (User_card::where('user_id', $player)->pluck('card') as $card) {
+                                $cards = array_merge($cards, [$card]);
+                            }
+                            $cards = array_merge($cards, [
+                                Table_card::where('table_id', $table_id)->value('flop1'),
+                                Table_card::where('table_id', $table_id)->value('flop2'),
+                                Table_card::where('table_id', $table_id)->value('flop3'),
+                                Table_card::where('table_id', $table_id)->value('turn'),
+                                Table_card::where('table_id', $table_id)->value('river')
+                            ]);
+                            $priority = \App\Classes\Calculation\Priority::priority($cards);
+                            $priorityArray = array_merge($priorityArray, [
+                                $player => $priority
+                            ]);
+                        }
+                    }
+                    arsort($priorityArray);
+
+                }
+                else if (Table_card::where('table_id', $table_id)->value('flop_open') == 1
+                    and Table_card::where('table_id', $table_id)->value('turn_open') == 1) {
                     Table_card::where('table_id', $table_id)->update([
                         'river_open' => 1
                     ]);
@@ -157,7 +213,7 @@ class ChoiceController extends Controller
                     foreach ($players as $player) {
                         if(User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
                             User_card::where('user_id', $player)->update([
-                                'current_bet' => 1
+                                'current_bet' => 1, 'last_bet' => 1
                             ]);
                         }
                     }
@@ -173,6 +229,6 @@ class ChoiceController extends Controller
                 }
             }
         }
-        return view('holdem.holdem');
+        return view('holdem.holdem', compact('priorityArray'));
     }
 }

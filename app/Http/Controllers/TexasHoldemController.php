@@ -87,16 +87,10 @@ class TexasHoldemController extends Controller
                 User_card::where('user_place', $dealer)->update([
                     'dealer' => 1
                 ]);
-                $smallBlind = Blinds::blinds()[1];
-                $bigBlind = Blinds::blinds()[2];
-
             }
 
         }
 
-
         return view('holdem.holdem');
     }
-
-
 }
