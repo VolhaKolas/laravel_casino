@@ -6,72 +6,79 @@ use App\Http\Requests\ChoiceRequest;
 use App\Table_card;
 use App\Table_user;
 use App\User_card;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 class ChoiceController extends Controller
 {
 
     private static function nextBetter() {
+        $table_id = auth()->user()->tableUsers->table_id;//current table
+        $players = Table_user::where('table_id', $table_id)->pluck("user_id"); //all game players
+        $userPlace = User_card::where('user_id', auth()->id())->value('user_place');
+        $smallBlind = \App\Classes\Position\Blinds::blinds()[1];
+        $bigBlind = \App\Classes\Position\Blinds::blinds()[2];
 
+        /*
+         * Here we determine who will be the next better. We must consider that there are players who may fold his cards
+         */
+
+        $allAvailablePlaces = [];
+        foreach ($players as $p) {
+            $currentUserPlace = User_card::where('user_id', $p)->value('user_place');
+            if(User_card::where('user_id', $p)->value('card') != null) {
+                $allAvailablePlaces = array_merge($allAvailablePlaces, [$currentUserPlace]);
+            }
+
+            if($currentUserPlace == $smallBlind) {
+                $smallBlindId = $p;
+            }
+            if($currentUserPlace == $bigBlind) {
+                $bigBlindId = $p;
+            }
+        }
+
+        sort($allAvailablePlaces);
+
+        for($i = 0; $i < count($allAvailablePlaces); $i++) {
+            if($allAvailablePlaces[$i] == $userPlace) {
+                if($allAvailablePlaces[$i] == $allAvailablePlaces[count($allAvailablePlaces) - 1]) {
+                    $nextPlace = $allAvailablePlaces[0];
+                }
+                else {
+                    $nextPlace = $allAvailablePlaces[$i + 1];
+                }
+            }
+        }
+
+
+        if(!isset($nextPlace)) {
+            if(User_card::where('user_id', $smallBlindId)->value('card') != null) {
+                $nextPlace = $smallBlind;
+            }
+            else if (User_card::where('user_id', $bigBlindId)->value('card') != null) {
+                $nextPlace = $bigBlind;
+            }
+            else {
+                $nextPlace = $allAvailablePlaces[0];
+            }
+        }
+
+
+        return $nextPlace;
     }
+
 
     public function choice(ChoiceRequest $request) {
 
         $data = $request->input('answer'); //value of current user bet
         $table_id = auth()->user()->tableUsers->table_id;//current table
         $players = Table_user::where('table_id', $table_id)->pluck("user_id"); //all game players
-        $numberOfPlayers = count($players); //count of players
         $maxBet = Table_user::where('table_id', $table_id)->max('bet');
-        $smallBlind = \App\Classes\Position\Blinds::blinds()[1];
-        $bigBlind = \App\Classes\Position\Blinds::blinds()[2];
 
         if(User_card::where('user_id', auth()->id())->value('current_bet') == 1) { // this 'if' have done for insurance. Only person with current_bet = 1 can make a bet
-            $userPlace = User_card::where('user_id', auth()->id())->value('user_place');
 
-            /*
-             * Here we determine who will be the next better. We must consider that there are players who may fold his cards
-             */
-
-            $allAvailablePlaces = [];
-            foreach ($players as $p) {
-                $currentUserPlace = User_card::where('user_id', $p)->value('user_place');
-                if(User_card::where('user_id', $p)->value('card') != null) {
-                    $allAvailablePlaces = array_merge($allAvailablePlaces, [$currentUserPlace]);
-                }
-
-                if($currentUserPlace == $smallBlind) {
-                    $smallBlindId = $p;
-                }
-                if($currentUserPlace == $bigBlind) {
-                    $bigBlindId = $p;
-                }
-            }
-
-            sort($allAvailablePlaces);
-
-            for($i = 0; $i < count($allAvailablePlaces); $i++) {
-                if($allAvailablePlaces[$i] == $userPlace) {
-                    if($allAvailablePlaces[$i] == $allAvailablePlaces[count($allAvailablePlaces) - 1]) {
-                        $nextPlace = $allAvailablePlaces[0];
-                    }
-                    else {
-                        $nextPlace = $allAvailablePlaces[$i + 1];
-                    }
-                }
-            }
-
-
-            if(!isset($nextPlace)) {
-                if(User_card::where('user_id', $smallBlindId)->value('card') != null) {
-                    $nextPlace = $smallBlind;
-                }
-                else if (User_card::where('user_id', $bigBlindId)->value('card') != null) {
-                    $nextPlace = $bigBlind;
-                }
-                else {
-                    $nextPlace = $allAvailablePlaces[0];
-                }
-            }
+            $nextPlace = self::nextBetter();
 
             //we must change current better, appointment of new better is on the bottom of method
             User_card::where('user_id', auth()->id())->update([
@@ -83,6 +90,8 @@ class ChoiceController extends Controller
                 Table_user::where('user_id', auth()->id())->decrement('money', $data);
                 Table_user::where('user_id', auth()->id())->increment('bet', $data);
                 Table_card::where('table_id', $table_id)->increment('table_money', $data);
+
+                //if user raise bet he become last_better
                 if($maxBet < Table_user::where('user_id', auth()->id())->value('bet')) {
                     foreach ($players as $player) {
                         User_card::where('user_id', $player)->update([
@@ -96,7 +105,7 @@ class ChoiceController extends Controller
                 }
             }
 
-            //if $data = 0 it's mean user fold cards but only if user isn't first better and don't increase bet
+            //if $data = 0 it's mean user fold cards but only if user isn't first better and don't increase bet (it's mean he check)
             else if($maxBet != Table_user::where('user_id', auth()->id())->value('bet')) {
                 Table_user::where('user_id', auth()->id())->update(['bet' => 0]);
                 User_card::where('user_id', auth()->id())->update([
@@ -188,10 +197,6 @@ class ChoiceController extends Controller
                         User_card::where('user_id', $player)->update([
                             'current_bet' => 1
                         ]);
-
-                        User_card::where('user_id', $player)->update([
-                            'last_bet' => 1
-                        ]);
                     }
                 }
                 if(!isset($beterDetermineSB)) {
@@ -202,10 +207,6 @@ class ChoiceController extends Controller
                             User_card::where('user_id', $player)->update([
                                 'current_bet' => 1
                             ]);
-
-                            User_card::where('user_id', $player)->update([
-                                'last_bet' => 1
-                            ]);
                         }
                     }
                 }
@@ -213,9 +214,44 @@ class ChoiceController extends Controller
                     foreach ($players as $player) {
                         if(User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
                             User_card::where('user_id', $player)->update([
-                                'current_bet' => 1, 'last_bet' => 1
+                                'current_bet' => 1
                             ]);
                         }
+                    }
+                }
+
+                foreach ($players as $player) {
+                    if(User_card::where('user_id', $player)->value('current_bet') == 1) {
+                        $currentBetterPlace = User_card::where('user_id', $player)->value('user_place');
+                    }
+                }
+
+                $allAvailablePlaces = [];
+                foreach ($players as $p) {
+                    $currentUserPlace = User_card::where('user_id', $p)->value('user_place');
+                    if(User_card::where('user_id', $p)->value('card') != null) {
+                        $allAvailablePlaces = array_merge($allAvailablePlaces, [$currentUserPlace]);
+                    }
+                }
+
+                sort($allAvailablePlaces);
+
+                for($k = 0; $k < count($allAvailablePlaces); $k++) {
+                    if($allAvailablePlaces[$k] == $currentBetterPlace) {
+                        if($k != 0) {
+                            $lastBeterPlace = $allAvailablePlaces[$k - 1];
+                        }
+                        else {
+                            $lastBeterPlace = $allAvailablePlaces[count($allAvailablePlaces) - 1];
+                        }
+                    }
+                }
+
+                foreach ($players as $player) {
+                    if(User_card::where('user_id', $player)->value('user_place') == $lastBeterPlace) {
+                        User_card::where('user_id', $player)->update([
+                            'last_bet' => 1
+                        ]);
                     }
                 }
             }

@@ -90,7 +90,8 @@ class TexasHoldemController extends Controller
             }
 
         }
-
         return view('holdem.holdem');
     }
+
+
 }
