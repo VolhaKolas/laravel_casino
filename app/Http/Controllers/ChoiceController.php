@@ -144,11 +144,13 @@ class ChoiceController extends Controller
 
 
             if($maxBet == $minBet and $lastBeter == auth()->id()) {
-                if (Table_card::where('table_id', $table_id)->value('flop_open') == 1
-                    and Table_card::where('table_id', $table_id)->value('turn_open') == 1
-                    and Table_card::where('table_id', $table_id)->value('river_open') == 1) {
+                $open = Table_card::where('table_id', $table_id)->value('open');
+                if ($open == 3) {
 
                     //final calculations
+                    Table_card::where('table_id', $table_id)->update([
+                        'open' => 4
+                    ]);
 
                     $priorityArray = [];
                     foreach ($players as $player) {
@@ -196,20 +198,24 @@ class ChoiceController extends Controller
 
 
                 }
-                else if (Table_card::where('table_id', $table_id)->value('flop_open') == 1
-                    and Table_card::where('table_id', $table_id)->value('turn_open') == 1) {
+                else if ($open == 2) {
                     Table_card::where('table_id', $table_id)->update([
-                        'river_open' => 1
+                        'open' => 3
                     ]);
                 }
-                else if (Table_card::where('table_id', $table_id)->value('flop_open') == 1) {
+                else if ($open == 1) {
                     Table_card::where('table_id', $table_id)->update([
-                        'turn_open' => 1
+                        'open' => 2
                     ]);
                 }
-                Table_card::where('table_id', $table_id)->update([
-                    'flop_open' => 1
-                ]);
+
+
+                else if ($open == 0) {
+                    Table_card::where('table_id', $table_id)->update([
+                        'open' => 1
+                    ]);
+                }
+
                 foreach ($players as $player) {
                     User_card::where('user_id', $player)->update([
                         'last_bet' => 0

@@ -160,7 +160,7 @@
                         @endforeach
 
 
-                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop_open') == 1)
+                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') >= 1)
                         <div class="t0" style="display: block; background-position: {{(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop1') % 100 - 2) * 100/12}}% {{25 * (round(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop1')/100))}}%">
                         </div>
 
@@ -170,11 +170,11 @@
                         <div class="t2" style="display: block; background-position: {{(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop3') % 100 - 2) * 100/12}}% {{25 * (round(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('flop3')/100))}}%">
                         </div>
                     @endif
-                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('turn_open') == 1)
+                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') >= 2)
                         <div class="t3" style="display: block; background-position: {{(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('turn') % 100 - 2) * 100/12}}% {{25 * (round(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('turn')/100))}}%">
                         </div>
                     @endif
-                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('river_open') == 1)
+                    @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') >= 3)
                         <div class="t4" style="display: block; background-position: {{(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('river') % 100 - 2) * 100/12}}% {{25 * (round(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('river')/100))}}%">
                         </div>
                     @endif
@@ -250,7 +250,6 @@
             @endif
 
 
-
                 <script>
                     @for($i = 1; $i <= \App\Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(); $i++)
 
@@ -268,6 +267,24 @@
 
                 </script>
         @endif
+
+        @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') == 4)
+            <script>
+                setTimeout(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "/new-deal",
+                        success: function (data) {
+                            console.log(data);
+                            window.location.href = "/texas";
+                        }
+                    });
+                }, 10000);
+
+            </script>
+        @endif
+
+
     @else
         <script>
             window.location.href = "/texas";
@@ -322,6 +339,8 @@
             }
 
             function send() {
+
+                @if(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') != 4)
                 $.ajax({
                     type: "POST",
                     url: "/choice",
@@ -330,9 +349,11 @@
                         window.location.href = "/texas";
                     }
                 });
+                @endif
 
-
-                conn.send('hello');
+                setTimeout(function () {
+                    conn.send('hello');
+                }, 100);
             }
 
             $('form').on("submit", function (e) {

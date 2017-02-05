@@ -19,6 +19,8 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->get('/cards', ['uses'=>"CardsController@cards", 'as'=>'cards']);
     $router->get('/reload', ['uses'=>"ReloadController@reload", 'as'=>'reload']);
     $router->post('/choice', ['uses'=>"ChoiceController@choice", 'as'=>'choice']);
+
+    $router->get('/new-deal', ['uses'=>"NewDealController@newDeal", 'as'=>'new-deal']);
 });
 
 Auth::routes();

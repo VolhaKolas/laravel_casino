@@ -22,9 +22,8 @@ class CreateTableTableCards extends Migration
             $table->integer('flop3')->nullable();
             $table->integer('turn')->nullable();
             $table->integer('river')->nullable();
-            $table->integer('flop_open')->default(0);
-            $table->integer('turn_open')->default(0);
-            $table->integer('river_open')->default(0);
+            $table->integer('open')->default(0);
+
 
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
         });
