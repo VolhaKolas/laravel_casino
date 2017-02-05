@@ -11,7 +11,7 @@ class NewDealController extends Controller
 {
     public function newDeal()
     {
-        if(User_card::where('user_id', auth()->id())->value('last_bet') == 1 and Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') == 4)
+        if(Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open') >= 4)
         {
             $bet = 100;
             $table_id = auth()->user()->tableUsers->table_id;//current table

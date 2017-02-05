@@ -1,0 +1,2 @@
+<div class="t4" style="display: block; background-position: {{(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('river') % 100 - 2) * 100/12}}% {{25 * (round(\App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('river')/100))}}%">
+</div>

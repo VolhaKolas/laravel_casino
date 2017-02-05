@@ -86,13 +86,13 @@ class ChoiceController extends Controller
             ]);
 
             //here we change columns with money
-            if($data > 0) {
+            if ($data > 0) {
                 Table_user::where('user_id', auth()->id())->decrement('money', $data);
                 Table_user::where('user_id', auth()->id())->increment('bet', $data);
                 Table_card::where('table_id', $table_id)->increment('table_money', $data);
 
                 //if user raise bet he become last_better
-                if($maxBet < Table_user::where('user_id', auth()->id())->value('bet')) {
+                if ($maxBet < Table_user::where('user_id', auth()->id())->value('bet')) {
                     foreach ($players as $player) {
                         User_card::where('user_id', $player)->update([
                             'last_bet' => 0
@@ -103,58 +103,71 @@ class ChoiceController extends Controller
                         'last_bet' => 1
                     ]);
                 }
-            }
-
-            //if $data = 0 it's mean user fold cards but only if user isn't first better and don't increase bet (it's mean he check)
-            else if($maxBet != Table_user::where('user_id', auth()->id())->value('bet')) {
+            } //if $data = 0 it's mean user fold cards but only if user isn't first better and don't increase bet (it's mean he check)
+            else if ($maxBet != Table_user::where('user_id', auth()->id())->value('bet')) {
                 Table_user::where('user_id', auth()->id())->update(['bet' => 0]);
                 User_card::where('user_id', auth()->id())->update([
                     'card' => null
                 ]);
             }
 
+            $countCards = 0;
+            foreach ($players as $player) {
+                if(User_card::where('user_id', $player)->value('card') != null) {
+                    $countCards++;
+                    $winerUser = $player;
+                }
+            }
+            if ($countCards == 1) {
+                Table_card::where('table_id', $table_id)->update([
+                   'open' => 5
+                ]);
+                $tableMoney = Table_card::where('table_id', $table_id)->value('table_money');
+                Table_card::where('table_id', $table_id)->decrement('table_money', $tableMoney);
+                Table_user::where('user_id', $winerUser)->increment('money', $tableMoney);
+            }
 
 
             $maxBet = Table_user::where('table_id', $table_id)->max('bet');
 
             $users = [];
             foreach ($players as $player) {
-                if(User_card::where('user_id', $player)->value('card') != null) {
+                if (User_card::where('user_id', $player)->value('card') != null) {
                     $users = array_merge($users, [$player]);
                 }
-                if(User_card::where('user_id', $player)->value('last_bet') == 1) {
+                if (User_card::where('user_id', $player)->value('last_bet') == 1) {
                     $lastBeter = $player;
                 }
             }
 
             foreach ($users as $user) {
-                if(Table_user::where('user_id', $user)->value("bet") < $maxBet) {
+                if (Table_user::where('user_id', $user)->value("bet") < $maxBet) {
                     $minBet = Table_user::where('user_id', $user)->value("bet");
                 }
             }
-            if(!isset($minBet)) {
+            if (!isset($minBet)) {
                 $minBet = Table_user::where('table_id', $table_id)->max('bet');
             }
 
 
-            /*
-             * if user's bets are equal and current better is who has bigBlind on preflop and smallBlind on flop, turn, river or who increase the bet
-             * We open river, turn, flop cards
-             */
+                /*
+                 * if user's bets are equal and current better is who has bigBlind on preflop and smallBlind on flop, turn, river or who increase the bet
+                 * We open river, turn, flop cards
+                 */
 
 
-            if($maxBet == $minBet and $lastBeter == auth()->id()) {
+            if ($maxBet == $minBet and $lastBeter == auth()->id()) {
                 $open = Table_card::where('table_id', $table_id)->value('open');
                 if ($open == 3) {
 
-                    //final calculations
+                        //final calculations
                     Table_card::where('table_id', $table_id)->update([
                         'open' => 4
                     ]);
 
                     $priorityArray = [];
                     foreach ($players as $player) {
-                        if(User_card::where('user_id', $player)->value('card') != null) {
+                        if (User_card::where('user_id', $player)->value('card') != null) {
                             $cards = [];
                             foreach (User_card::where('user_id', $player)->pluck('card') as $card) {
                                 $cards = array_merge($cards, [$card]);
@@ -177,20 +190,20 @@ class ChoiceController extends Controller
                     $maxPriority = 0;
                     $winers = [];
                     foreach ($priorityArray as $pa) {
-                        if($pa['priority'] > $maxPriority) {
+                        if ($pa['priority'] > $maxPriority) {
                             $maxPriority = $pa['priority'];
                         }
                     }
 
                     foreach ($priorityArray as $pa) {
-                        if($pa['priority'] == $maxPriority) {
+                        if ($pa['priority'] == $maxPriority) {
                             $winers = array_merge($winers, [$pa['id']]);
                         }
                     }
 
 
                     $bank = Table_card::where('table_id', $table_id)->value('table_money');
-                    $givenMoney = $bank/count($winers);
+                    $givenMoney = $bank / count($winers);
                     foreach ($winers as $winer) {
                         Table_user::where('user_id', $winer)->increment('money', $givenMoney);
                     }
@@ -208,8 +221,6 @@ class ChoiceController extends Controller
                         'open' => 2
                     ]);
                 }
-
-
                 else if ($open == 0) {
                     Table_card::where('table_id', $table_id)->update([
                         'open' => 1
@@ -221,17 +232,17 @@ class ChoiceController extends Controller
                         'last_bet' => 0
                     ]);
 
-                    if(User_card::where('user_id', $player)->value('dealer') == 2 and User_card::where('user_id', $player)->value('card') != null) {
+                    if (User_card::where('user_id', $player)->value('dealer') == 2 and User_card::where('user_id', $player)->value('card') != null) {
                         $beterDetermineSB = 1;
                         User_card::where('user_id', $player)->update([
                             'current_bet' => 1
                         ]);
                     }
                 }
-                if(!isset($beterDetermineSB)) {
+                if (!isset($beterDetermineSB)) {
                     foreach ($players as $player) {
 
-                        if(User_card::where('user_id', $player)->value('dealer') == 3 and User_card::where('user_id', $player)->value('card') != null) {
+                        if (User_card::where('user_id', $player)->value('dealer') == 3 and User_card::where('user_id', $player)->value('card') != null) {
                             $beterDetermineBB = 1;
                             User_card::where('user_id', $player)->update([
                                 'current_bet' => 1
@@ -239,9 +250,9 @@ class ChoiceController extends Controller
                         }
                     }
                 }
-                if(!isset($beterDetermineSB) and !isset($beterDetermineBB)) {
+                if (!isset($beterDetermineSB) and !isset($beterDetermineBB)) {
                     foreach ($players as $player) {
-                        if(User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
+                        if (User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
                             User_card::where('user_id', $player)->update([
                                 'current_bet' => 1
                             ]);
@@ -250,7 +261,7 @@ class ChoiceController extends Controller
                 }
 
                 foreach ($players as $player) {
-                    if(User_card::where('user_id', $player)->value('current_bet') == 1) {
+                    if (User_card::where('user_id', $player)->value('current_bet') == 1) {
                         $currentBetterPlace = User_card::where('user_id', $player)->value('user_place');
                     }
                 }
@@ -258,40 +269,41 @@ class ChoiceController extends Controller
                 $allAvailablePlaces = [];
                 foreach ($players as $p) {
                     $currentUserPlace = User_card::where('user_id', $p)->value('user_place');
-                    if(User_card::where('user_id', $p)->value('card') != null) {
+                    if (User_card::where('user_id', $p)->value('card') != null) {
                         $allAvailablePlaces = array_merge($allAvailablePlaces, [$currentUserPlace]);
                     }
                 }
 
                 sort($allAvailablePlaces);
 
-                for($k = 0; $k < count($allAvailablePlaces); $k++) {
-                    if($allAvailablePlaces[$k] == $currentBetterPlace) {
-                        if($k != 0) {
+                for ($k = 0; $k < count($allAvailablePlaces); $k++) {
+                    if ($allAvailablePlaces[$k] == $currentBetterPlace) {
+                        if ($k != 0) {
                             $lastBeterPlace = $allAvailablePlaces[$k - 1];
-                        }
-                        else {
+                        } else {
                             $lastBeterPlace = $allAvailablePlaces[count($allAvailablePlaces) - 1];
                         }
                     }
                 }
 
                 foreach ($players as $player) {
-                    if(User_card::where('user_id', $player)->value('user_place') == $lastBeterPlace) {
+                    if (User_card::where('user_id', $player)->value('user_place') == $lastBeterPlace) {
                         User_card::where('user_id', $player)->update([
                             'last_bet' => 1
                         ]);
                     }
                 }
-            }
-            else {
+            } else {
                 foreach ($players as $player) {
-                    if(User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
+                    if (User_card::where('user_id', $player)->value('user_place') == $nextPlace) {
                         User_card::where('user_id', $player)->update([
                             'current_bet' => 1
                         ]);
                     }
                 }
+            }
+            if (isset($countCards)) {
+                return $countCards;
             }
         }
     }
