@@ -25,7 +25,7 @@ class NewDealController extends Controller
 
             foreach ($players as $player) {
                 if (User_card::where('user_id', $player)->value('dealer') == 1) {
-                    $currentDealer = \App\User_card::where('user_id', $player)->value('user_place');
+                    $currentDealer = User_card::where('user_id', $player)->value('user_place');
                 }
             }
 
@@ -68,32 +68,31 @@ class NewDealController extends Controller
                     Table_user::where('user_id', $player)->increment('bet', $bet);
 
                     //Add value of last better for bigBlind user, then somebody who increase bet become last better
-                    \App\User_card::where('user_id', $player)->update([
+                    User_card::where('user_id', $player)->update([
                         'last_bet' => 1
                     ]);
                 }
                 else if ($user_place == $firstBeter) {
-                    \App\User_card::where('user_id', $player)->update([
+                    User_card::where('user_id', $player)->update([
                         'current_bet' => 1
                     ]);
                 }
 
                 if (count($players) == 2) {
-                    \App\User_card::where('user_id', $player)->update([
+                    User_card::where('user_id', $player)->update([
                         'current_bet' => 1
                     ]);
                 }
             }
-
-            \App\Table_card::where('table_id', auth()->user()->tableUsers->table_id)->increment('table_money', $bet + $bet / 2);
 
             foreach ($players as $player) {
                 User_card::where('user_id', $player)->update([
                     'card' => 0
                 ]);
             }
+
             Table_card::where('table_id', $table_id)->update([
-                'flop1' => 0, 'flop2' => 0, 'flop3' => 0, 'turn' => 0, 'river' => 0
+                'flop1' => 0, 'flop2' => 0, 'flop3' => 0, 'turn' => 0, 'river' => 0, 'table_money' => $bet + $bet / 2
             ]);
 
 

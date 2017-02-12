@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use JavaScript;
+use Illuminate\Support\Facades\View;
 use App\Classes\CreateArray\CreateArray;
 use App\Classes\Position\Blinds;
 use App\Priority;
@@ -11,6 +13,7 @@ use App\User_card;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class TexasHoldemController extends Controller
 {
@@ -90,7 +93,14 @@ class TexasHoldemController extends Controller
             }
 
         }
-        return view('holdem.holdem');
+
+        JavaScript::put([
+            'users' => Table_user::where('table_id', auth()->user()->tableUsers->table_id)->count(),
+            'open' => Table_card::where('table_id', auth()->user()->tableUsers->table_id)->value('open'),
+            'userPlace' => auth()->user()->userCards[0]->user_place
+        ]);
+
+        return View::make('holdem.holdem');
     }
 
 

@@ -39,7 +39,6 @@ pair - 1e+2
         $count1 = 0; //count for calculation first couple
         $count2 = 0; //count for calculation second couple
         $count3 = 0; //count for calculation third couple
-        $support = 0;
 
         $match1 = 0; //here we put first couple
         $match2 = 0; //here we put second couple

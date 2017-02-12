@@ -168,6 +168,8 @@ return [
          */
 
         Barryvdh\Debugbar\ServiceProvider::class,
+        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
+
 
 
 

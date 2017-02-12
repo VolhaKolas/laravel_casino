@@ -40,6 +40,6 @@
             </div>
         @endif
         <input type="hidden" name="answer" id="answer" value="">
-        <button class="btn btn-success" onclick="send()">Выбрать</button>
+        <button class="btn btn-success" id="button">Выбрать</button>
     </form>
 </div>

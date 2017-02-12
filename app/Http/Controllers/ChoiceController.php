@@ -111,6 +111,8 @@ class ChoiceController extends Controller
                 ]);
             }
 
+
+            //if all players fold card. Only the one is winer.
             $countCards = 0;
             foreach ($players as $player) {
                 if(User_card::where('user_id', $player)->value('card') != null) {

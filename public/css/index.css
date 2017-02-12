@@ -24,15 +24,15 @@
     background-repeat: no-repeat;
     background-position: 0% 100%;
 }
-.background .a0, .background .a1, .background .a2, .background .a3, .background .a4,
-.background .a5, .background .a6, .background .a7, .background .a8, .background .a9,
-.background .a10,  .background .a11, .background .a12, .background .a13, .background .a14, .background .a15,
+
+.background #a0, .background #a1, .background #a2, .background #a3, .background #a4,
+.background #a5, .background #a6, .background #a7, .background #a8, .background #a9,
+.background #a10,  .background #a11, .background #a12, .background #a13, .background #a14, .background #a15,
 .background .t0, .background .t1, .background .t2, .background .t3, .background .t4
 {
     background-image: url("koloda.png");
     width: 44px;
     height: 65.6px;
-    display: none;
 }
 
 #dealer, #smallblind, #bigblind  {
@@ -56,80 +56,80 @@
     background-image: url("bigblind.png");
 }
 
-.background .a0 {
+.background #a0 {
     left: 73%;
     top: -5%;
 }
-.background .a1 {
+.background #a1 {
     left: 65%;
     top: -5%;
 }
 
 
-.background .a2 {
+.background #a2 {
     right: 0%;
     top: 10%;
 }
-.background .a3 {
+.background #a3 {
     right: -8%;
     top: 10%;
 }
 
 
-.background .a4 {
+.background #a4 {
     right: 0%;
     bottom: 20%;
 }
-.background .a5 {
+.background #a5 {
     right: -8%;
     bottom: 20%;
 }
 
-.background .a6 {
+.background #a6 {
     left: 73%;
     bottom: 5%;
 }
-.background .a7 {
+.background #a7 {
     left: 65%;
     bottom: 5%;
 }
 
 
-.background .a8 {
+.background #a8 {
     left: 35%;
     bottom: 5%;
 }
-.background .a9 {
+.background #a9 {
     left: 27%;
     bottom: 5%;
 }
 
 
-.background .a10 {
+.background #a10 {
     left: 0%;
     bottom: 20%;
 }
-.background .a11 {
+.background #a11 {
     left: -8%;
     bottom: 20%;
 }
 
 
-.background .a12 {
+.background #a12 {
     left: 0%;
     top: 10%;
 }
-.background .a13 {
+.background #a13 {
     left: -8%;
     top: 10%;
 }
 
 
-.background .a14 {
+.background #a14 {
     left: 35%;
     top: -5%;
 }
-.background .a15 {
+.background #a15 {
     left: 27%;
     top: -5%;
 }
