@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Table_user;
 use Closure;
 
 class PokerGame
@@ -19,12 +20,9 @@ class PokerGame
 
         //Сделай нормальный мидлвар, чтобы заходило только со страницы userpage
 
-        if($_SERVER['HTTP_REFERER'] == 'http://poker/pregame' or $_SERVER['HTTP_REFERER'] == 'http://poker/texas') {
-
-            return $next($request);
-        }
-        else {
+        if(!isset(auth()->user()->tableUsers->table_id)) {
             return redirect()->route('userpage');
         }
+        return $next($request);
     }
 }

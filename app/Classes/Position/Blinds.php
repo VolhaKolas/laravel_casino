@@ -9,6 +9,7 @@
 namespace App\Classes\Position;
 
 
+use App\Classes\Position\AllAvailablePlaces;
 use App\Table_user;
 use App\User_card;
 
@@ -27,39 +28,67 @@ class Blinds
 
         $dealer = User_card::where('dealer', 1)->value('user_place');
 
+        $allAvailablePlaces = AllAvailablePlaces::places();
+
+        if(isset($dealer)) {
+            for ($i = 0; $i < count($allAvailablePlaces); $i++) {
+                if ($allAvailablePlaces[$i] == $dealer) {
+                    $dealerKey = $i;
+                }
+            }
+
+            //player with Small Blind
+
+            if ($dealerKey == count($allAvailablePlaces) - 1) {
+                $smallBlind = $allAvailablePlaces[0];
+                $smallBlindKey = 0;
+            } else {
+                $smallBlind = $allAvailablePlaces[$dealerKey + 1];
+                $smallBlindKey = $dealerKey + 1;
+            }
 
 
-        $smallBlind = $dealer + 1; //player with Small Blind
-        $bigBlind = $dealer + 2; //player with Big Blind
-        $firstBeter = $dealer + 3; //player who must do first bet
+            //player with Big Blind
+            if (isset($smallBlind)) {
+                if ($smallBlindKey == count($allAvailablePlaces) - 1) {
+                    $bigBlind = $allAvailablePlaces[0];
+                    $bigBlindKey = 0;
+                } else {
+                    $bigBlind = $allAvailablePlaces[$smallBlindKey + 1];
+                    $bigBlindKey = $smallBlindKey + 1;
+                }
+
+
+                //player who must do first bet
+                if(isset($bigBlind)) {
+                    if ($bigBlindKey == count($allAvailablePlaces) - 1) {
+                        $firstBeter = $allAvailablePlaces[0];
+                    } else {
+                        $firstBeter = $allAvailablePlaces[$bigBlindKey + 1];
+                    }
+                }
+            }
+        }
+
+
 
         //here we create position if we have only two players. In this case we have only SB and BB
         if ($numberOfPlayers == 2) {
-            $smallBlind = $dealer;
-            $firstBeter = $smallBlind;
-            if($dealer == 2) {
-                $bigBlind = 1;
-            }
-            else {
-                $bigBlind = 2;
-            }
             $dealer = 0;
         }
-        //here we create correct position if dealer position is the last or on end of list
-        else if ($numberOfPlayers - $dealer == 2) {
-            $firstBeter = 1;
+
+        if(!isset($smallBlind)) {
+            $smallBlind = 0;
         }
-        else if($numberOfPlayers - $dealer == 1) {
-            $bigBlind = 1;
-            $firstBeter = 2;
+        if(!isset($bigBlind)) {
+            $bigBlind = 0;
         }
-        else if ($numberOfPlayers - $dealer == 0) {
-            $smallBlind = 1;
-            $bigBlind = 2;
-            $firstBeter = 3;
+        if(!isset($firstBeter)) {
+            $firstBeter = 0;
         }
 
         return([$dealer, $smallBlind, $bigBlind, $firstBeter]);
-
     }
+
+
 }

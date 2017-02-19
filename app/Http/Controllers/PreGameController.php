@@ -52,6 +52,7 @@ class PreGameController extends Controller
             \App\Table_user::insert(
                 ['id' => null, 'table_id' => "$table_id", 'user_id' => "$user", 'money' => 1000]
             );
+
             return view('holdem.pregame', compact('table_id'));
         }
         else {
