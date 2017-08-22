@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace Casino\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
@@ -60,6 +60,6 @@ class Handler extends ExceptionHandler
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
-        return redirect()->guest('login');
+        return redirect()->guest(route('login'));
     }
 }

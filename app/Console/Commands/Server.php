@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Casino\Console\Commands;
 
-use App\Classes\Socket\Socket;
+use Casino\Classes\Socket\Socket;
 use Illuminate\Console\Command;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;

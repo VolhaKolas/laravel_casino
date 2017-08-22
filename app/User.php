@@ -1,12 +1,11 @@
 <?php
 
-namespace App;
+namespace Casino;
 
-use App\Table_user;
-use App\User_card;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -17,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'time', 'online'
+        'login', 'name', 'lastname', 'email', 'password', 'u_time'
     ];
 
     /**
@@ -29,12 +28,33 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function tableUsers() {
-        return $this->hasOne(Table_user::class);
+    public static function offer() {
+        return User::where('id', Auth::id())->pluck('u_offer');
     }
 
-    public function userCards() {
-        return $this->hasMany(User_card::class);
+    public static function answer() {
+        return User::where('id', Auth::id())->pluck('u_answer');
     }
+
+    public static function usersToAnswer() {
+        $u_ids = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
+        where('users.u_answer', 0)->where('users.id', '!=', Auth::id())->where('tables.t_id', "!=", 1)->pluck('id');
+        $ids = [];
+        foreach ($u_ids as $u_id) {
+            $ids = array_merge($ids, [$u_id]);
+        }
+        return $ids;
+    }
+
+    public static function loginToAnswer() {
+        $u_ids = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
+        where('users.u_answer', 0)->where('users.id', '!=', Auth::id())->where('tables.t_id', "!=", 1)->pluck('login');
+        $ids = [];
+        foreach ($u_ids as $u_id) {
+            $ids = array_merge($ids, [$u_id]);
+        }
+        return $ids;
+    }
+
 
 }

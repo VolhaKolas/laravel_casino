@@ -6,6 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
 {
+    const MONEY = 1000;
+
     /**
      * Run the migrations.
      *
@@ -15,9 +17,22 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
+            $table->string("login", 50);
+            $table->string('name', 100);
+            $table->string('lastname', 100);
+            $table->string('email', 100)->unique();
+            $table->string('password', 100);
+            $table->integer('u_time');
+            $table->integer('u_place')->nullable();
+            $table->integer('u_money')->default(self::MONEY);
+            $table->integer('u_bet')->default(0);
+            $table->integer('u_dealer')->default(0);
+            $table->integer('u_current_better')->default(0);
+            $table->integer('u_last_better')->default(0);
+            $table->string('u_photo', 100)->nullable();
+            $table->integer('u_offer')->default(0);
+            $table->integer('u_answer')->default(0);
+            $table->string('u_socket', 15)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -30,6 +45,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::dropIfExists('users');
     }
 }

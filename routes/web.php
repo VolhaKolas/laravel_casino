@@ -1,26 +1,37 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
-Route::get('/', ['uses'=>'HomeController@home', 'as' => 'home']);
-Route::get('/rules', ['uses'=>"RulesController@rules", 'as'=>'rules']);
 
-
-Route::group(['middleware' => ['auth']], function($router) {
-
-    $router->get('/userpage', ['uses'=>"UserPageController@userpage", 'as'=>'userpage']);
-    $router->post('/online', ['uses'=>"OnlineController@online", 'as'=>'online']); //ajax determine user is online or not
-
-    $router->post('/pregame', ['uses'=>"PreGameController@pregame", 'as'=>'pregame']);
-    $router->get('/before', ['uses'=>"PreGameController@before", 'as'=>'before']);
-    $router->get('/deleteUser', ['uses'=>"PreGameController@deleteUser", 'as'=>'deleteUser']);
-
-    $router->get('/texas', ['uses' => 'TexasHoldemController@game', 'as' => 'texas'])->middleware('texas');
-
-    $router->get('/cards', ['uses'=>"CardsController@cards", 'as'=>'cards']);
-    $router->get('/reload', ['uses'=>"ReloadController@reload", 'as'=>'reload']);
-    $router->post('/choice', ['uses'=>"ChoiceController@choice", 'as'=>'choice']);
-
-    $router->get('/new-deal', ['uses'=>"NewDealController@newDeal", 'as'=>'new-deal']);
-});
 
 Auth::routes();
+
+Route::group(['middleware' => ['auth']], function($router) {
+    $router->get("/edit", "EditController@get");
+    $router->post("/edit", "EditController@post")->name('edit');
+
+    $router->get("/editpass", "EditPassController@get");
+    $router->post("/editpass", "EditPassController@post")->name('editpass');
+
+    Route::get('/preplay', 'PrePlayController@get');
+    Route::post('/preplay', 'PrePlayController@post')->name('preplay');
+
+
+    Route::get('/play', 'PlayController@get');
+    Route::post('/play', 'PlayController@post')->name('play');
+
+
+    Route::post('/break', 'BreakController@post')->name('break');
+});
+
+Route::get('/', 'WelcomController@index');
+Route::get('/home', 'HomeController@index')->name('home');

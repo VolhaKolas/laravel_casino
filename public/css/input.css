@@ -1,0 +1,23 @@
+#button {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    background-image: url("image/download.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    right: 3.5%;
+}
+#imageWrapper {
+    position: relative;
+}
+#photo {
+    display: none;
+}
+#img {
+    width: 100px;
+    height: auto;
+}
+#login {
+    padding-top: 5px;
+    padding-left: 15px;
+}
