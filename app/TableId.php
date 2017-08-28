@@ -20,4 +20,16 @@ class TableId extends Model
         }
         return $currentTId; //returns t_id of new table
     }
+
+    public static function answer($user_id) {
+        $tId = DB::table('users')->where('id',  $user_id)->pluck('t_id');
+        $tId = $tId[0];
+        $usersCount =  DB::table('users')->where('t_id', $tId)->count();
+        DB::table('users')->where('id', $user_id)->
+        update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0]);
+        if(2 == $usersCount) {
+            DB::table('users')->where('t_id', $tId)->
+            update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0]);
+        }
+    }
 }

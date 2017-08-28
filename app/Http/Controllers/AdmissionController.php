@@ -2,14 +2,14 @@
 
 namespace Casino\Http\Controllers;
 
-use Casino\TableId;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-class BreakController extends Controller
+class AdmissionController extends Controller
 {
     public function post() {
-        TableId::answer(Auth::id());
-        return redirect()->back();
+        DB::table('users')->where('id', Auth::id())->
+        update(["u_answer" => 1]);
+        return redirect()->route('play');
     }
 }

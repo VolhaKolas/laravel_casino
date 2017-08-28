@@ -23,11 +23,13 @@ class Socket extends BaseSocket
         $this->clients->attach($conn);
         echo "New connection! ({$conn->resourceId})\n";
         //$host = $conn->WebSocket;
+        //TODO-update table users
         User::where('id', Auth::id())->update(['u_socket' => $conn->resourceId]);
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
+        //TODO-select from table users
         $numRecv = count($this->clients) - 1;
         foreach ($this->clients as $client) {
             if($from !== $client) {

@@ -17,6 +17,8 @@
     <link href="{{ asset('css/checkbox.css') }}" rel="stylesheet">
     <link href="{{ asset('css/message.css') }}" rel="stylesheet">
     <link href="{{ asset('css/screen.css') }}" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
 </head>
 <body>
     <div id="app">
@@ -102,9 +104,9 @@
             <div id="center">
                 <div class="row form">
                     <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('preplay')   }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admission')   }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <input type="submit" value="Играть" class="btn btn-primary">
+                            <input type="submit" value="Играть" onclick="sendAdmission();" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -112,20 +114,20 @@
                     <div class="col-xs-2 col-xs-offset-5">
                         <form action="{{ route('break')   }}" enctype="multipart/form-data" method="post">
                             {{ csrf_field() }}
-                            <input type="submit" value="Отказаться" class="btn btn-danger">
+                            <input type="submit" value="Отказаться" onclick="sendRefusal();" class="btn btn-danger">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    @elseif(!Auth::guest() and 1 == \Casino\User::offer()[0] and 1 == \Casino\User::answer()[0])
+    @elseif(!Auth::guest() and 0 != count(\Casino\User::loginToAnswer()) and 1 == \Casino\User::answer()[0])
         <div id="waiting" style="display: block">
             <div id="center">
                 <div class="row form">
                     <div class="col-xs-2 col-xs-offset-5">
                         Ожидание игроков:
-                        @foreach(\Casino\User::loginToAnswer() as $login)
-                            <p>- {{  $login  }}</p>
+                        @foreach(\Casino\User::loginIdToAnswer() as $key => $login)
+                            <p id="{{  $key  }}">- {{  $login  }}</p>
                         @endforeach
                     </div>
                 </div>
@@ -136,9 +138,9 @@
             <div id="center">
                 <div class="row form">
                     <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('preplay')   }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admission')   }}" method="post" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <input type="submit" value="Играть" class="btn btn-primary">
+                            <input type="submit" value="Играть" onclick="sendAdmission();" class="btn btn-primary">
                         </form>
                     </div>
                 </div>
@@ -146,7 +148,7 @@
                     <div class="col-xs-2 col-xs-offset-5">
                         <form action="{{ route('break')   }}" enctype="multipart/form-data" method="post">
                             {{ csrf_field() }}
-                            <input type="submit" value="Отказаться" class="btn btn-danger">
+                            <input type="submit" value="Отказаться" onclick="sendRefusal();" class="btn btn-danger">
                         </form>
                     </div>
                 </div>
@@ -157,7 +159,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="{{ asset('js/preview.js') }}"></script>
     <script src="{{ asset('js/checkbox.js') }}"></script>
     @if(!Auth::guest())

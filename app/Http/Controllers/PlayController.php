@@ -26,6 +26,7 @@ class PlayController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function get() {
+
         return view('play');
     }
 

@@ -31,6 +31,10 @@ Route::group(['middleware' => ['auth']], function($router) {
 
 
     Route::post('/break', 'BreakController@post')->name('break');
+    Route::post('/admission', 'AdmissionController@post')->name('admission');
+
+    Route::post('/answer', 'AnswerController@post')->name('answer');
+
 });
 
 Route::get('/', 'WelcomController@index');
