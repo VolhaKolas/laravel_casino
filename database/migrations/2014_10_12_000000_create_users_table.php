@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->integer('u_offer')->default(0);
             $table->integer('u_answer')->default(0);
             $table->string('u_socket', 15)->nullable();
+            $table->integer('u_dealer_card')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

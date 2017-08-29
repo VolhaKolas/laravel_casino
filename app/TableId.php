@@ -26,10 +26,11 @@ class TableId extends Model
         $tId = $tId[0];
         $usersCount =  DB::table('users')->where('t_id', $tId)->count();
         DB::table('users')->where('id', $user_id)->
-        update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0]);
+        update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0, "u_dealer_card" => null]);
         if(2 == $usersCount) {
             DB::table('users')->where('t_id', $tId)->
-            update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0]);
+            update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0, "u_dealer_card" => null]);
+            DB::table("tables")->where('t_id', $tId)->delete();
         }
     }
 }

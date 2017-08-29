@@ -54,7 +54,7 @@
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
-                                <a href="/preplay" class="dropdown-toggle" role="button" aria-expanded="false">
+                                <a href="/play" class="dropdown-toggle" role="button" aria-expanded="false">
                                     Играть
                                 </a>
                             </li>
@@ -154,8 +154,19 @@
                 </div>
             </div>
         </div>
-
     @endif
+
+
+    @if(!Auth::guest() and 1 == \Casino\User::gameBegin())
+        <div id="game" style="display: block">
+            <div id="table">
+            </div>
+        </div>
+    @else
+        <div id="game">
+        </div>
+    @endif
+
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

@@ -22,13 +22,8 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->get("/editpass", "EditPassController@get");
     $router->post("/editpass", "EditPassController@post")->name('editpass');
 
-    Route::get('/preplay', 'PrePlayController@get');
-    Route::post('/preplay', 'PrePlayController@post')->name('preplay');
-
-
     Route::get('/play', 'PlayController@get');
     Route::post('/play', 'PlayController@post')->name('play');
-
 
     Route::post('/break', 'BreakController@post')->name('break');
     Route::post('/admission', 'AdmissionController@post')->name('admission');

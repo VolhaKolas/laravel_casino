@@ -1,4 +1,4 @@
-#screen, #waiting {
+#screen, #waiting, #game {
     display: none;
     position: fixed;
     width: 100%;
@@ -14,5 +14,17 @@
     margin-bottom: 1%;
 }
 #waiting {
-    color: navy;;
+    color: navy;
+}
+#game {
+    background-color: white;
+}
+#table {
+    background-image: url("image/table.png");
+    width: 550px;
+    height: 362.8px;
+    background-repeat: no-repeat;
+    margin: auto;
+    margin-top: 5%;
+    background-size: 100%;
 }

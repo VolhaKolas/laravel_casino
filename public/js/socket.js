@@ -11,17 +11,16 @@ conn.onmessage = function (e) {
             success: function (getData) {
                 if(0 == getData) {
                     $("#waiting").css("display", "none");
-                    window.location.href = "/preplay";
+                    window.location.href = "/play";
                 }
                 else if(2 == getData) {
                     $("#waiting").css("display", "none");
-                    //TODO-добавить открытие покерного стола
+                    $("#game").css("display", "block");
                 }
                 else {
                     var userToDel = data['user'];
                     var p = $("#waiting p");
                     for (var i = 0; i < p.length; i++) {
-                        console.log($(p).eq(i).attr('id'));
                         if($(p).eq(i).attr('id') == userToDel) {
                             $("#waiting p").eq(i).remove();
                         }
