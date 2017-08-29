@@ -29,7 +29,7 @@ class PlayController extends Controller
     public function get() {
         $users = User::where('id', '!=', Auth::id())->where('u_offer', '!=', 1)
             ->orderBy("lastname")->get(); //names of checkboxes: checkbox + user_id
-        $client = new \SplObjectStorage;
+
         return view('play', compact('users'));
     }
 
@@ -54,6 +54,7 @@ class PlayController extends Controller
             $dealerCard = \Casino\User::firstDealerCardCreation(); //card for dealer determine
             DB::table('users')->where('id', Auth::id())
                 ->update([
+                    "u_place" => 1,
                     'u_offer' => 1,
                     'u_answer' => 1,
                     't_id' => $currentTId,

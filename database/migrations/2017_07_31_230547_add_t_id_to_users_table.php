@@ -14,7 +14,7 @@ class AddTIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('t_id')->length(10)->unsigned()->nullable();
+            $table->integer('t_id')->length(10)->unsigned()->default(1);
             $table->foreign('t_id')->references('t_id')->on('tables');
         });
     }

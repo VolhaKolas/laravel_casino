@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class AnswerController extends Controller
 {
-    public function post(Request $request) {
+    public function post(Request $request) { //ajax после получения сокета
         $answer = $request->all()['answer'];
         $user = (int) $request->all()['user'];
         //если сокет сработал раньше, чем юзер, приславший его, внес изменения в БД
@@ -25,10 +25,12 @@ class AnswerController extends Controller
             return 0;
         }
         else {
-            $offer = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
-            where('users.u_offer', 1)->count();
-            $ans = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
-            where('users.u_answer', 1)->count();
+            $offer = DB::table('users')->where('t_id', function ($query) {
+                $query->select("t_id")->from('users')->where('id', Auth::id());
+            })->where('u_offer', 1)->count();
+            $ans = DB::table('users')->where('t_id', function ($query) {
+                $query->select("t_id")->from('users')->where('id', Auth::id());
+            })->where('u_answer', 1)->count();
             if($offer == $ans) { //если все пользователи готовы играть
                 return 2;
             }

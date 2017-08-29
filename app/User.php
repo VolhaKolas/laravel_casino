@@ -38,8 +38,10 @@ class User extends Authenticatable
 
 
     public static function usersToAnswer() {
-        $u_ids = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
-        where('users.u_answer', 0)->where('users.id', '!=', Auth::id())->where('tables.t_id', "!=", 1)->pluck("login", 'id');
+        $u_ids = DB::table('users')
+            ->where('t_id', function ($query) {
+            $query->select("t_id")->from('users')->where('id', Auth::id());
+        })->where('u_answer', 0)->where('id', '!=', Auth::id())->where('t_id', "!=", 1)->pluck("login", 'id');
         $ids = [];
         foreach ($u_ids as $u_id) {
             $ids = array_merge($ids, [$u_id]);
@@ -48,8 +50,10 @@ class User extends Authenticatable
     }
 
     public static function loginToAnswer() {
-        $u_ids = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
-        where('users.u_answer', 0)->where('users.id', '!=', Auth::id())->where('tables.t_id', "!=", 1)->pluck('login');
+        $u_ids = DB::table('users')
+            ->where('t_id', function ($query) {
+            $query->select("t_id")->from('users')->where('id', Auth::id());
+        })->where('u_answer', 0)->where('id', '!=', Auth::id())->where('t_id', "!=", 1)->pluck('login');
         $ids = [];
         foreach ($u_ids as $u_id) {
             $ids = array_merge($ids, [$u_id]);
@@ -58,8 +62,10 @@ class User extends Authenticatable
     }
 
     public static function loginIdToAnswer() {
-        $u_ids = DB::table('users')->leftJoin('tables', 'users.t_id', '=', 'tables.t_id')->
-        where('users.u_answer', 0)->where('users.id', '!=', Auth::id())->where('tables.t_id', "!=", 1)->pluck('login', "id");
+        $u_ids = DB::table('users')
+            ->where('t_id', function ($query) {
+            $query->select("t_id")->from('users')->where('id', Auth::id());
+        })->where('u_answer', 0)->where('id', '!=', Auth::id())->where('t_id', "!=", 1)->pluck('login', "id");
         return $u_ids;
     }
 

@@ -15,7 +15,6 @@ class CreateTablesTable extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->increments("t_id");
-            $table->integer('t_free')->default(1);
             $table->integer('t_money')->default(0);
             $table->integer('t_flop1')->nullable();
             $table->integer('t_flop2')->nullable();
