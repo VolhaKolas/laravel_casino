@@ -22,6 +22,8 @@
 </head>
 <body>
 
+{{\Casino\TableId::id1()}}
+
     <div id="app">
         <nav class="navbar navbar-default">
             <div class="container">

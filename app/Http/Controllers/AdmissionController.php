@@ -7,6 +7,7 @@ use Casino\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 class AdmissionController extends Controller
 {
     public function post() {
