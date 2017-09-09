@@ -136,4 +136,8 @@ class User extends Authenticatable
         return $arrayCards;
     }
 
+    public static function players() {
+        return DB::table("users")->where('id', Auth::id())->pluck('u_players')[0];
+    }
+
 }

@@ -22,15 +22,19 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->get("/editpass", "EditPassController@get");
     $router->post("/editpass", "EditPassController@post")->name('editpass');
 
-    Route::get('/play', 'PlayController@get');
-    Route::post('/play', 'PlayController@post')->name('play');
+    $router->get('/play', 'PlayController@get');
+    $router->post('/play', 'PlayController@post')->name('play');
 
-    Route::post('/break', 'BreakController@post')->name('break');
-    Route::post('/admission', 'AdmissionController@post')->name('admission');
+    $router->post('/break', 'BreakController@post')->name('break');
+    $router->post('/admission', 'AdmissionController@post')->name('admission');
 
-    Route::post('/answer', 'AnswerController@post')->name('answer');
-
+    $router->post('/answer', 'AnswerController@post')->name('answer');
+    $router->post('/socket', 'AnswerController@socket')->name('socket');
+    $router->post("/invitation", 'AnswerController@invitation')->name('invitation');
+    $router->post("/setinput", 'AnswerController@setinput')->name('setinput');
 });
+
+
 
 Route::get('/', 'WelcomController@index');
 Route::get('/home', 'HomeController@index')->name('home');

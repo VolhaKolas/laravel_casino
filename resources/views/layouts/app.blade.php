@@ -24,6 +24,8 @@
 
 {{\Casino\TableId::id1()}}
 
+<input type="hidden" id="user" data-user="{{ Illuminate\Support\Facades\Auth::id() }}">
+
     <div id="app">
         <nav class="navbar navbar-default">
             <div class="container">
@@ -104,69 +106,26 @@
 
     @if(!Auth::guest() and 1 == \Casino\User::offer()[0] and 1 != \Casino\User::answer()[0])
         <div id="screen" style="display: block">
-            <div id="center">
-                <div class="row form">
-                    <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('admission')   }}" method="post" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            <input type="submit" value="Играть" onclick="sendAdmission();" class="btn btn-primary">
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('break')   }}" enctype="multipart/form-data" method="post">
-                            {{ csrf_field() }}
-                            <input type="submit" value="Отказаться" onclick="sendRefusal();" class="btn btn-danger">
-                        </form>
-                    </div>
-                </div>
-            </div>
+            @include('layouts.getoffer')
         </div>
     @elseif(!Auth::guest() and 0 != count(\Casino\User::loginToAnswer()) and 1 == \Casino\User::answer()[0])
         <div id="waiting" style="display: block">
-            <div id="center">
-                <div class="row form">
-                    <div class="col-xs-2 col-xs-offset-5">
-                        Ожидание игроков:
-                        @foreach(\Casino\User::loginIdToAnswer() as $key => $login)
-                            <p id="{{  $key  }}">- {{  $login  }}</p>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
+            @include('layouts.waiting')
         </div>
-    @else
+    @elseif(!Auth::guest())
         <div id="screen">
-            <div id="center">
-                <div class="row form">
-                    <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('admission')   }}" method="post" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            <input type="submit" value="Играть" onclick="sendAdmission();" class="btn btn-primary">
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-2 col-xs-offset-5">
-                        <form action="{{ route('break')   }}" enctype="multipart/form-data" method="post">
-                            {{ csrf_field() }}
-                            <input type="submit" value="Отказаться" onclick="sendRefusal();" class="btn btn-danger">
-                        </form>
-                    </div>
-                </div>
-            </div>
+            @include('layouts.getoffer')
         </div>
     @endif
 
 
     @if(!Auth::guest() and 1 == \Casino\User::gameBegin())
         <div id="game" style="display: block">
-            <div id="table">
-            </div>
+            @include('layouts.game')
         </div>
     @else
         <div id="game">
+            @include('layouts.game')
         </div>
     @endif
 

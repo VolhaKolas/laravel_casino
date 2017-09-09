@@ -39,4 +39,38 @@ class AnswerController extends Controller
             }
         }
     }
+
+    public function socket(Request $request) {
+        $connectionNumber = $request->all()['connection'];
+        User::where('id', Auth::id())->
+            update(["u_socket" => $connectionNumber]);
+    }
+
+    public function invitation(Request $request) {
+        $socketData = [];
+        $key = array_keys($request->all()); //this all done because laravel converts json data to a weird format: ({{jsonData}: null})
+        $key = $key[0];
+        $key = json_decode($key, true);
+        foreach ($key as $key1 => $id) {
+            $jsonToDB = [];
+            foreach ($key as $key2 => $u_id) {
+                if($key2 != $key1) {
+                    $jsonToDB = array_merge($jsonToDB, [$u_id]);
+                }
+            }
+            $jsonToDB = json_encode($jsonToDB);
+            DB::table("users")->where('id', $id)->update(['u_players' => $jsonToDB]);
+            if($id != Auth::id()) {
+                $id = (int)$id;
+                $connection = DB::table("users")->where('id', $id)->pluck('u_socket')[0];
+                $socketData = array_merge($socketData, [$connection]);
+            }
+        }
+        $socketData = json_encode($socketData);
+        return $socketData;
+    }
+
+    public function setinput(Request $request) {
+        return DB::table("users")->where('id', Auth::id())->pluck('u_players')[0];
+    }
 }

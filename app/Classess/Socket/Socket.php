@@ -2,9 +2,12 @@
 namespace Casino\Classes\Socket;
 
 use Casino\Classes\Socket\Base\BaseSocket;
+use DateTime;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Ratchet\ConnectionInterface;
+use Devristo\Phpws\Server\WebSocketServer;
 
 class Socket extends BaseSocket
 {
@@ -19,32 +22,35 @@ class Socket extends BaseSocket
     {
         //Store the new connection to send messages to later
 
-
         $this->clients->attach($conn);
-        echo "New connection! ({$conn->resourceId})\n";
-        //$host = $conn->WebSocket;
-        //TODO-update table users
-        User::where('id', Auth::id())->update(['u_socket' => $conn->resourceId]);
+        $socket = json_encode(['connection' => $conn->resourceId]);
+        $conn->send($socket);
+
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        //TODO-select from table users
-        $numRecv = count($this->clients) - 1;
+        $data = json_decode($msg, true);
+        $array = [];
+        foreach ($data as $key => $item) {
+            if($key != 'user' and $key != 'answer') {
+                $array = array_merge($array, [$item]);
+            }
+        }
+        var_dump($array);
         foreach ($this->clients as $client) {
-            if($from !== $client) {
+            if(in_array($client->resourceId, $array)) {
                 //The sender is not the receiver, send to each client connection
                 $client->send($msg);
             }
         }
     }
 
+
     public function onClose(ConnectionInterface $conn)
     {
         //The connection is closed, remove it, as we can no longer send it message
         $this->clients->detach($conn);
-
-        echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)

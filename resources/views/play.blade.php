@@ -3,10 +3,8 @@
 @if(!Auth::guest())
 @section('content')
 
-    <form enctype="multipart/form-data" method="POST" action="{{  route('play')  }}" id="preplay">
+    <form enctype="multipart/form-data" method="POST" action="{{  route('play')  }}" id="play">
         {{ csrf_field() }}
-
-        <input type="hidden" id="user" data-user="{{ Illuminate\Support\Facades\Auth::id() }}">
 
         <div class="container">
             <h2 class="section-heading text-center">Создать игру</h2>
