@@ -37,7 +37,6 @@ class Socket extends BaseSocket
                 $array = array_merge($array, [$item]);
             }
         }
-        var_dump($array);
         foreach ($this->clients as $client) {
             if(in_array($client->resourceId, $array)) {
                 //The sender is not the receiver, send to each client connection

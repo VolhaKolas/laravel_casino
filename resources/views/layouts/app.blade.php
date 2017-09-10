@@ -22,6 +22,7 @@
 </head>
 <body>
 
+
 {{\Casino\TableId::id1()}}
 
 <input type="hidden" id="user" data-user="{{ Illuminate\Support\Facades\Auth::id() }}">

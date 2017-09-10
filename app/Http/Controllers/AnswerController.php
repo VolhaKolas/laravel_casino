@@ -32,6 +32,25 @@ class AnswerController extends Controller
                 $query->select("t_id")->from('users')->where('id', Auth::id());
             })->where('u_answer', 1)->count();
             if($offer == $ans) { //если все пользователи готовы играть
+
+                $dealerCards = DB::table("users")->where('t_id', function ($query) {
+                    $query->select("t_id")->from('users')->where('id', Auth::id());
+                })->select('u_dealer_card', "u_place", 'id')->get();
+
+                $dealCard = $dealerCards[0]->u_dealer_card % 100;
+                $place = $dealerCards[0]->u_place;
+                $dealer = $dealerCards[0]->id;
+                foreach ($dealerCards as $dealerCard) {
+                    $dealerC = $dealerCard->u_dealer_card % 100;
+                    $dealerP = $dealerCard->u_place;
+                    $dealerId = $dealerCard->id;
+                    if($dealerC > $dealCard or ($dealerC == $dealCard and $dealerCard->u_place > $place)) {
+                        $dealerCard = $dealerC;
+                        $place = $dealerP;
+                        $dealer = $dealerId;
+                    }
+                }
+                DB::table('users')->where('id', $dealer)->update(['u_dealer'=> 1]);
                 return 2;
             }
             else { //если кого-то еще ждем
@@ -52,14 +71,6 @@ class AnswerController extends Controller
         $key = $key[0];
         $key = json_decode($key, true);
         foreach ($key as $key1 => $id) {
-            $jsonToDB = [];
-            foreach ($key as $key2 => $u_id) {
-                if($key2 != $key1) {
-                    $jsonToDB = array_merge($jsonToDB, [$u_id]);
-                }
-            }
-            $jsonToDB = json_encode($jsonToDB);
-            DB::table("users")->where('id', $id)->update(['u_players' => $jsonToDB]);
             if($id != Auth::id()) {
                 $id = (int)$id;
                 $connection = DB::table("users")->where('id', $id)->pluck('u_socket')[0];
@@ -71,6 +82,6 @@ class AnswerController extends Controller
     }
 
     public function setinput(Request $request) {
-        return DB::table("users")->where('id', Auth::id())->pluck('u_players')[0];
+        return User::players();
     }
 }

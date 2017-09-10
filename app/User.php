@@ -137,7 +137,11 @@ class User extends Authenticatable
     }
 
     public static function players() {
-        return DB::table("users")->where('id', Auth::id())->pluck('u_players')[0];
+        $players = DB::table('users')->where('t_id', function ($query) {
+            $query->select("t_id")->from('users')->where('id', Auth::id());
+        })->where('id', "!=", Auth::id())->pluck('id');
+        $players = json_encode($players);
+        return $players;
     }
 
 }
