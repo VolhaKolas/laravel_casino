@@ -31,6 +31,9 @@ class TableId extends Model
         "u_place" => null]);
 
         if(2 == $usersCount and $tId != 1) {
+            DB::table('user_cards')->join('users', 'user_cards.u_id', '=', 'users.id')->where('users.t_id', $tId)->
+            delete(); //????
+
             DB::table('users')->where('t_id', $tId)->
             update(['t_id' => 1, 'u_offer' => 0, "u_answer" => 0, "u_dealer_card" => null,
                 "u_place" => null]);

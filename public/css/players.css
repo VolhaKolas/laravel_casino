@@ -1,0 +1,127 @@
+#player1 {
+    left: 56%;
+    top: -12%;
+}
+#player2 {
+    left: 94%;
+    top: 0%;
+}
+#player3 {
+    left: 99%;
+    top: 65%;
+}
+#player4 {
+    left: 56%;
+    top: 82%;
+}
+#player5 {
+    left: -18%;
+    top: 65%;
+}
+#player6 {
+    left: -13%;
+    top: 0%;
+}
+#player1, #player2, #player3,
+#player4, #player5, #player6 {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+.player {
+    width: 100px;
+    height: 50px;
+    border: 1px solid black;
+    text-align: center;
+    word-wrap: break-word;
+    border-radius: 5px;
+    clear: both;
+    background-color: dimgrey;
+    font-size: 12px;
+    color: white;
+}
+.card {
+    margin: auto;
+    width: 66px;
+    height: 24.6px;
+    overflow: hidden;
+}
+.card1, .card2 {
+    background-image: url("image/koloda.png");
+    width: 33px;
+    height: 49.2px;
+    background-size: 1300%;
+    float: left;
+    background-position: 0% 100%;
+}
+.photo {
+    width: 48.5px;
+    height: 25px;
+    background-image: url("image/profile.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    position: absolute;
+    border-radius: 25px;
+}
+
+#photo1 {
+    top: 0.5%;
+    left: 45.3%;
+}
+#photo2 {
+    top: 6.5%;
+    left: 83.3%;
+}
+#photo3 {
+    top: 70.5%;
+    left: 88%;
+}
+#photo4 {
+    top: 79%;
+    left: 45%;
+}
+#photo5 {
+    top: 70.5%;
+    left: 2.8%;
+}
+#photo6 {
+    top: 6.5%;
+    left: 7.2%;
+}
+#dealer1 {
+    top: 15%;
+    left: 47%;
+}
+#dealer2 {
+    top: 18%;
+    left: 75%;
+
+}
+#dealer3 {
+    top: 59%;
+    left: 79%;
+
+}
+#dealer4 {
+    top: 65%;
+    left: 47%;
+
+}
+#dealer5 {
+    top: 59%;
+    left: 15%;
+
+}
+#dealer6 {
+    top: 18%;
+    left: 19%;
+
+}
+#dealer1, #dealer2, #dealer3, #dealer4, #dealer5, #dealer6 {
+    position: absolute;
+    width: 35.25px;
+    height: 35.75px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url("image/Dealer.png");
+}

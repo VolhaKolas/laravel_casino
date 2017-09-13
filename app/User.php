@@ -95,7 +95,7 @@ class User extends Authenticatable
         return $card;
     }
 
-    public static function dealerCardCreation($array) {
+    public static function dealerCardCreation(array $array) {
         $card = 0;
         while (0 == $card) {
             $card = mt_rand(2, 14); // создаю случайное число в диапозоне от 2 до 14
@@ -116,7 +116,7 @@ class User extends Authenticatable
 
     public static function firstCardsCreation() {
         $arrayCards = [];
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 7; $i++) {
             $card = mt_rand(2, 14); // создаю случайное число в диапозоне от 2 до 14
             $multiplier = mt_rand(0, 3); //формирую случайным образом множитель
             if (1 == $multiplier) { //если множитель равен 1, добавляю к числу 100
@@ -135,6 +135,29 @@ class User extends Authenticatable
         }
         return $arrayCards;
     }
+
+    public static function cardsCreation(array $array, $count) {
+        $arrayCards = [];
+        for ($i = 0; $i < $count; $i++) {
+            $card = mt_rand(2, 14); // создаю случайное число в диапозоне от 2 до 14
+            $multiplier = mt_rand(0, 3); //формирую случайным образом множитель
+            if (1 == $multiplier) { //если множитель равен 1, добавляю к числу 100
+                $card = $card + 100;
+            } else if (2 == $multiplier) { //если множитель равен 2, добавляю к числу 200
+                $card = $card + 200;
+            } else if (3 == $multiplier) { //если множитель равен 3, добавляю к числу 300
+                $card = $card + 300;
+            }
+
+            if (!in_array($card, $arrayCards) and !in_array($card, $array)) { //проверяю, есть ли в массиве такое число, если нет добавляю его в массив
+                $arrayCards = array_merge($arrayCards, [$card]);
+            } else { // если число есть в массиве, откатываю цикл, чтобы сформировать новое число
+                $i--;
+            }
+        }
+        return $arrayCards;
+    }
+
 
     public static function players() {
         $players = DB::table('users')->where('t_id', function ($query) {

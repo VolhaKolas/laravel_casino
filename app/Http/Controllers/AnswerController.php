@@ -2,6 +2,7 @@
 
 namespace Casino\Http\Controllers;
 
+use Casino\Classes\Game\Players;
 use Casino\TableId;
 use Casino\User;
 use Illuminate\Http\Request;
@@ -37,21 +38,38 @@ class AnswerController extends Controller
                     $query->select("t_id")->from('users')->where('id', Auth::id());
                 })->select('u_dealer_card', "u_place", 'id')->get();
 
-                $dealCard = $dealerCards[0]->u_dealer_card % 100;
-                $place = $dealerCards[0]->u_place;
-                $dealer = $dealerCards[0]->id;
-                foreach ($dealerCards as $dealerCard) {
-                    $dealerC = $dealerCard->u_dealer_card % 100;
-                    $dealerP = $dealerCard->u_place;
-                    $dealerId = $dealerCard->id;
-                    if($dealerC > $dealCard or ($dealerC == $dealCard and $dealerCard->u_place > $place)) {
-                        $dealerCard = $dealerC;
-                        $place = $dealerP;
-                        $dealer = $dealerId;
+                foreach ($dealerCards as $key => $dealerCard) {
+                    if(0 == $key) {
+                        $dealCard = $dealerCard->u_dealer_card % 100;//определение дилера
+                        $place = $dealerCard->u_place;
+                        $dealer = $dealerCard->id;
+                    }
+                    else {
+                        $dealerC = $dealerCard->u_dealer_card % 100;
+                        $dealerP = $dealerCard->u_place;
+                        $dealerId = $dealerCard->id;
+                        if($dealerC > $dealCard or ($dealerC == $dealCard and $dealerP < $place)) {
+                            $dealCard = $dealerC;
+                            $place = $dealerP;
+                            $dealer = $dealerId;
+                        }
                     }
                 }
                 DB::table('users')->where('id', $dealer)->update(['u_dealer'=> 1]);
-                return 2;
+
+                $data = DB::table('users')->where('t_id', function($query) {
+                    $query->select('t_id')->from('users')->where('id', Auth::id());
+                })->select('u_place', 'u_photo', 'u_dealer_card', 'id', 'login', 'u_money')->get();
+                $array = [];
+                foreach ($data as $item) {
+                    $array = array_merge($array, [['place' => $item->u_place, 'id' => $item->id,
+                        'photo' => $item->u_photo, 'card' => $item->u_dealer_card,
+                        'login' => $item->login, 'money' => $item->u_money,
+                        "user" => Auth::id(), "dealer" => Players::dealer()]]); //данные для ajax вывода карт
+                }
+                $array = json_encode($array);
+
+                return $array;
             }
             else { //если кого-то еще ждем
                 return 1;

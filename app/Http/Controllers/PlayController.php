@@ -60,6 +60,27 @@ class PlayController extends Controller
                     't_id' => $currentTId,
                     'u_dealer_card' => $dealerCard]); //add user to DB
 
+            $cards = \Casino\User::firstCardsCreation();
+            foreach ($cards as $key => $card) {
+                if($key < 2) {
+                    DB::table('user_cards')->insert([
+                        'uc_id' => null,
+                        'u_id' => Auth::id(),
+                        'uc_card' => $card]);
+                }
+                else {
+                    break;
+                }
+            }
+            DB::table('tables')->where('t_id', function ($query) {
+                $query->select('t_id')->from('users')->where('id', Auth::id());
+            })->update([
+                't_flop1' => $cards[2],
+                't_flop2' => $cards[3],
+                't_flop3' => $cards[4],
+                't_turn' => $cards[5],
+                't_river' => $cards[6]]);
+
             foreach ($arrayIds as $arrayId) { //add users to DB for whom current user send offer
                 //TODO-проверку, что кто-то другой не пригласил данного пользователя раньше
                 DB::table('users')->where('id', $arrayId)

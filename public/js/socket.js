@@ -33,11 +33,7 @@ conn.onmessage = function (e) {
                         $("#waiting").css("display", "none");
                         window.location.href = "/play";
                     }
-                    else if (2 == getData) {
-                        $("#waiting").css("display", "none");
-                        $("#game").css("display", "block");
-                    }
-                    else {
+                    else if (1 == getData) {
                         var userToDel = data['user'];
                         var p = $("#waiting p");
                         for (var i = 0; i < p.length; i++) {
@@ -45,7 +41,42 @@ conn.onmessage = function (e) {
                                 $("#waiting p").eq(i).remove();
                             }
                         }
+                    }
+                    else {
+                        getData = JSON.parse(getData);
+                        $('#table').empty();
+                        for (var i = 0; i < getData.length; i++) {
+                            var photo = getData[i].photo;
+                            var addPhoto;
+                            var card1;
+                            var card2 = '<div class="card2"></div>';
+                            if(photo != null) {
+                                var url = "photos/" +  getData[i].id + "/" + getData[i].photo;
+                                addPhoto = '<div class="photo" id="photo' + getData[i].place + '" style="background-image: url(' + url + ')"></div>';
+                            }
+                            else {
+                                addPhoto = '<div class="photo" id="photo' + getData[i].place + '"></div>';
+                            }
+                            if(getData[i].id == getData[i].user || getData[i].id == getData[i].dealer) {
+                                card1 = '<div class="card1" style="background-position:' + 100/12 * (getData[i].card % 100 - 2) + '%' + 100/4 * Math.round(getData[i].card/100) + '%;"></div>';
+                            }
+                            else {
+                                card1 = '<div class="card1"></div>';
+                            }
+                            var cards = '<div class="card">' + card1 + card2 + '</div>';
+                            var play = '<div class="player"><b>' + getData[i].login + '</b><p>' + getData[i].money + '</p></div>';
+                            var player = '<div id="player' + getData[i].place + '" data-id="' + getData[i].id + '">' + cards + play + '</div>';
 
+                            if(getData[i].id == getData[i].dealer) {
+                                var dealer = '<div id="dealer' + getData[i].place + '"></div>';
+                                $('#table').append(dealer);
+                            }
+
+                            $('#table').append(addPhoto);
+                            $('#table').append(player);
+                        }
+                        $("#waiting").css("display", "none");
+                        $("#game").css("display", "block");
                     }
                 }
             });

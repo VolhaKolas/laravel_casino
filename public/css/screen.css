@@ -25,6 +25,8 @@
     height: 362.8px;
     background-repeat: no-repeat;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 7%;
     background-size: 100%;
+    padding-top: 5%;
+    position: relative;
 }
