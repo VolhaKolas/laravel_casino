@@ -10,10 +10,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class Players
 {
+    const BET = 100;
+    const MONEY = 1000;
+
     public static function players() {
-        $players = DB::table('users')->where('t_id', function ($query) {
-            $query->select('t_id')->from('users')->where('id', Auth::id());
-        })->where('t_id', "!=", 1)->select('u_money', 'login', 'u_dealer_card', 'u_place' , 'u_photo', 'id')->get();
+        if(self::gameContinue() > 0) {
+            $players = DB::table('users')->where('t_id', function ($query) {
+                $query->select('t_id')->from('users')->where('id', Auth::id());
+            })->where('t_id', "!=", 1)->select('u_money', 'login', 'u_dealer_card', 'u_place', 'u_photo', 'id')->get();
+        }
+        else {
+            $players = DB::table('users AS u')->join('user_cards AS uc', 'u.id', '=', 'uc.u_id')->
+                where('u.t_id', function ($query) {
+                    $query->select('t_id')->from('users')->where('id', Auth::id());
+                })->where('u.t_id', "!=", 1)->select('u.u_money', 'u.login', 'uc.uc_card', 'u.u_place', 'u.u_photo', 'u.id')->get();
+        }
         return $players;
     }
 
@@ -27,5 +38,35 @@ class Players
         else {
             return 0;
         }
+    }
+
+    public static function currentBetter() {
+        $currentBetter = DB::table('users')->where('t_id', function ($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->where('u_current_better', 1)->select('id', 'login')->get();
+        if(count($currentBetter) > 0) {
+            return $currentBetter[0];
+        }
+        else {
+            return 0;
+        }
+        return $currentBetter;
+    }
+
+    public static function gameContinue() {
+        $dealerCards = DB::table('users')->where('t_id', function ($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->where('u_dealer_card', '!=', null)->count();
+        return $dealerCards;
+    }
+
+    public static function tableMoney() {
+        return DB::table('tables')->where('t_id', function ($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_money')[0];
+    }
+
+    public static function currentBet() {
+
     }
 }

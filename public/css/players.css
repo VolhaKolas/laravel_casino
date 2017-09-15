@@ -125,3 +125,13 @@
     background-size: 100%;
     background-image: url("image/Dealer.png");
 }
+.continue {
+    position: absolute;
+    top: 30%;
+    left: -20%;
+}
+.exit {
+    position: absolute;
+    top: -22%;
+    left: 95%;
+}

@@ -36,3 +36,12 @@ $("#select input[type='checkbox']").on("click", function () {
 $("#message .close").on("click", function () {
     $("#message").css("display", "none");
 });
+
+$('#bet input[type="checkbox"]').on('click', function () {
+    var check = document.querySelectorAll("#bet input[type='checkbox']");
+    for(var j = 0; j < check.length; j++) {
+        if(check[j] != this) {
+            $(check[j]).prop('checked', false);
+        }
+    }
+});

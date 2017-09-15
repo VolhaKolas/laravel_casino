@@ -12,7 +12,8 @@ class CleanTable
     public static function clean() {
         DB::table('users')->update([
             't_id' => 1, 'u_offer' => 0, "u_answer" => 0, "u_dealer_card" => null,
-            "u_place" => null, "u_dealer" => 0
+            "u_place" => null, "u_dealer" => 0, 'u_money' => 1000, 'u_current_better' => 0,
+            'u_last_better' => 0
         ]);
         DB::table('user_cards')->delete();
     }

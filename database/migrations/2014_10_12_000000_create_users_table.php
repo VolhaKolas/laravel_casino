@@ -6,8 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration
 {
-    const MONEY = 1000;
-
     /**
      * Run the migrations.
      *
@@ -24,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 100);
             $table->integer('u_time');
             $table->integer('u_place')->nullable();
-            $table->integer('u_money')->default(self::MONEY);
+            $table->integer('u_money')->default(\Casino\Classes\Game\Players::MONEY);
             $table->integer('u_bet')->default(0);
             $table->integer('u_dealer')->default(0);
             $table->integer('u_current_better')->default(0);

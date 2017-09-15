@@ -32,6 +32,10 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->post('/socket', 'AnswerController@socket')->name('socket');
     $router->post("/invitation", 'AnswerController@invitation')->name('invitation');
     $router->post("/setinput", 'AnswerController@setinput')->name('setinput');
+
+    $router->post("/continue", 'ContinueController@post')->name('continue');
+    $router->post("/exit", 'ExitController@post')->name('exit');
+    $router->post("/bet", 'BetController@post')->name('bet');
 });
 
 

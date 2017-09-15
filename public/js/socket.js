@@ -44,6 +44,8 @@ conn.onmessage = function (e) {
                     }
                     else {
                         getData = JSON.parse(getData);
+                        var contin = document.getElementById('continue');
+                        var exit = document.getElementById('exit');
                         $('#table').empty();
                         for (var i = 0; i < getData.length; i++) {
                             var photo = getData[i].photo;
@@ -64,7 +66,7 @@ conn.onmessage = function (e) {
                                 card1 = '<div class="card1"></div>';
                             }
                             var cards = '<div class="card">' + card1 + card2 + '</div>';
-                            var play = '<div class="player"><b>' + getData[i].login + '</b><p>' + getData[i].money + '</p></div>';
+                            var play = '<div class="player"><b>' + getData[i].login + '</b><p>' + getData[i].money + '$</p></div>';
                             var player = '<div id="player' + getData[i].place + '" data-id="' + getData[i].id + '">' + cards + play + '</div>';
 
                             if(getData[i].id == getData[i].dealer) {
@@ -75,6 +77,8 @@ conn.onmessage = function (e) {
                             $('#table').append(addPhoto);
                             $('#table').append(player);
                         }
+                        $('#table').append(contin);
+                        $('#table').append(exit);
                         $("#waiting").css("display", "none");
                         $("#game").css("display", "block");
                     }
