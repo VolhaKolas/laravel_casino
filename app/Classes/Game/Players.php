@@ -67,6 +67,23 @@ class Players
     }
 
     public static function currentBet() {
+        $maxBet = DB::table('users')->where('t_id', function ($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->max('u_bet');
+        $currentBet = DB::table('users')->where('id', Auth::id())->pluck('u_bet')[0];
+        return $maxBet - $currentBet;
+    }
 
+    public static function lastBetter() {
+        return  DB::table('users')->where('id', Auth::id())->pluck('u_last_better')[0];
+    }
+
+    public static function checkMoney() {
+        $user = DB::table('users')->where('id', Auth::id())->select('u_money', 'u_bet')->get();
+        $maxBet = DB::table('users')->where('t_id', function ($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->max('u_bet');
+        $sum = $user[0]->u_money + $user[0]->u_bet - $maxBet - self::BET;
+        return $sum;
     }
 }

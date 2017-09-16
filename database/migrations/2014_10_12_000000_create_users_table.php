@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->integer('u_dealer')->default(0);
             $table->integer('u_current_better')->default(0);
             $table->integer('u_last_better')->default(0);
+            $table->integer('u_fold')->default(0);
             $table->string('u_photo', 100)->nullable();
             $table->integer('u_offer')->default(0);
             $table->integer('u_answer')->default(0);
