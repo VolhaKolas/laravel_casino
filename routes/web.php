@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']], function($router) {
     $router->post("/exit", 'ExitController@post')->name('exit');
     $router->post("/bet", 'BetController@post')->name('bet');
     $router->post("/next", 'NextController@post')->name('next');
+    $router->post("/nextGame", 'NextGameController@post')->name('nextGame');
 });
 
 

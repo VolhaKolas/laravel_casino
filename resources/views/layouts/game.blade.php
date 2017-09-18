@@ -1,7 +1,7 @@
 
 <div id="table">
     @if(!Auth::guest())
-        @if(\Casino\Classes\Game\Players::gameContinue() > 0)
+        @if(\Casino\Classes\Game\Players::gameContinue() > 0) <!-- если определяется дилер при первой раздаче карт  -->
             @foreach(\Casino\Classes\Game\Players::players() as $player)
                 @if($player->u_photo != null)
                     <div class="photo" id="photo{{ $player->u_place }}" style="background-image: url('photos/{{$player->id}}/{{$player->u_photo}}')"></div>
@@ -34,7 +34,7 @@
                         </div>
                     </form>
                 </div>
-        @else
+        @else <!-- обычная раздача карт -->
             @for($i = 0; $i < count(\Casino\Classes\Game\Players::players()); $i = $i + 2)
                 @if(Casino\Classes\Game\Players::players()[$i]->u_photo != null)
                     <div class="photo" id="photo{{ Casino\Classes\Game\Players::players()[$i]->u_place }}"
@@ -47,7 +47,8 @@
                 @endif
                     <div id="player{{ \Casino\Classes\Game\Players::players()[$i]->u_place }}" data-id="{{ \Casino\Classes\Game\Players::players()[$i]->id  }}">
                         <div class="card">
-                            @if(\Casino\Classes\Game\Players::players()[$i]->id == Illuminate\Support\Facades\Auth::id())
+                            @if(4 == \Casino\Classes\Game\Players::open() or \Casino\Classes\Game\Players::players()[$i]->id == Illuminate\Support\Facades\Auth::id() or
+                            in_array(\Casino\Classes\Game\Players::players()[$i]->id, \Casino\Classes\Game\Players::foldUsers()))
                                 <div class="card1" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::players()[$i]->uc_card % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::players()[$i]->uc_card/100)}}%;"></div>
                                 <div class="card2" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::players()[$i + 1]->uc_card % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::players()[$i + 1]->uc_card/100)}}%;"></div>
                             @else
@@ -55,7 +56,13 @@
                                 <div class="card2"></div>
                             @endif
                         </div>
-                        <div class="player"><b>{{ \Casino\Classes\Game\Players::players()[$i]->login }}</b><p>{{ \Casino\Classes\Game\Players::players()[$i]->u_money }}$</p></div>
+                        <div class="player">
+                            <b>{{ \Casino\Classes\Game\Players::players()[$i]->login }}</b>
+                            <p>{{ \Casino\Classes\Game\Players::players()[$i]->u_money }}$</p>
+                            @if(in_array(\Casino\Classes\Game\Players::players()[$i]->id, \Casino\Classes\Game\Players::foldUsers()))
+                                <p>fold</p>
+                            @endif
+                        </div>
                     </div>
                     @if(\Casino\Classes\Game\Players::players()[$i]->id == \Casino\Classes\Game\Players::dealer())
                         <div id="dealer{{ \Casino\Classes\Game\Players::players()[$i]->u_place }}"></div>
@@ -82,83 +89,25 @@
 
 
         @if(gettype(\Casino\Classes\Game\Players::currentBetter()) != 'integer')
-            @if(\Casino\Classes\Game\Players::currentBetter()->id == \Illuminate\Support\Facades\Auth::id())
-                @if(0 == \Casino\Classes\Game\Players::lastBetter())
-                    <div id="bet">
-                        <form enctype="multipart/form-data" method="POST" action="{{  route('bet')  }}">
-                            {{ csrf_field() }}
-                            @if(\Casino\Classes\Game\Players::checkMoney() >= 0)
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="checkbox checkbox-info">
-                                            <input id="raise" name="raise" type="checkbox">
-                                            <label for="raise">
-                                                Повысить ставку на {{ \Casino\Classes\Game\Players::BET }}$
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="container">
-                                <div class="row">
-                                    <div class="checkbox checkbox-info">
-                                        <input id="call" name="call" type="checkbox">
-                                        <label for="call">
-                                            Принять ставку {{ \Casino\Classes\Game\Players::currentBet() }}$
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="checkbox checkbox-info">
-                                        <input id="fold" name="fold" type="checkbox">
-                                        <label for="fold">
-                                            Сбросить карты
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+            @include('layouts.forms')
 
-                            <input type="submit" value="Выбрать" class="btn btn-success">
-                        </form>
+            @if(\Casino\Classes\Game\Players::open() != null)
+                @if(\Casino\Classes\Game\Players::open() >= 1)
+                    <div id="flop1" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::flop1() % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::flop1()/100)}}%;">
                     </div>
-                @else
-                    <div id="bet">
-                        <form enctype="multipart/form-data" method="POST" action="{{  route('next')  }}">
-                            {{ csrf_field() }}
-
-                            @if(\Casino\Classes\Game\Players::checkMoney() >= 0)
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="checkbox checkbox-info">
-                                            <input id="raise" name="raise" type="checkbox">
-                                            <label for="raise">
-                                                Повысить ставку на {{ \Casino\Classes\Game\Players::BET }}$
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="container">
-                                <div class="row">
-                                    <div class="checkbox checkbox-info">
-                                        <input id="next" name="next" type="checkbox">
-                                        <label for="next">
-                                            Продолжить
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="submit" value="Выбрать" class="btn btn-success">
-                        </form>
+                    <div id="flop2" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::flop2() % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::flop2()/100)}}%;">
                     </div>
+                    <div id="flop3" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::flop3() % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::flop3()/100)}}%;">
+                    </div>
+                    @if(\Casino\Classes\Game\Players::open() >= 2)
+                        <div id="turn" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::turn() % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::turn()/100)}}%;">
+                        </div>
+                        @if(\Casino\Classes\Game\Players::open() >= 3)
+                            <div id="river" style="background-position: {{100/12 * (\Casino\Classes\Game\Players::river() % 100 - 2)}}% {{100/4 * floor(\Casino\Classes\Game\Players::river()/100)}}%;">
+                            </div>
+                        @endif
+                    @endif
                 @endif
-            @else
-                <div id="playerWaiting">
-                Ожидание игрока: {{ \Casino\Classes\Game\Players::currentBetter()->login }}
-                </div>
             @endif
         @endif
 

@@ -86,4 +86,87 @@ class Players
         $sum = $user[0]->u_money + $user[0]->u_bet - $maxBet - self::BET;
         return $sum;
     }
+
+    public static function flop1() {
+        $card = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_flop1');
+        if(count($card) > 0) {
+            return $card[0];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static function flop2() {
+        $card = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_flop2');
+        if(count($card) > 0) {
+            return $card[0];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static function flop3() {
+        $card = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_flop3');
+        if(count($card) > 0) {
+            return $card[0];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static function turn() {
+        $card = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_turn');
+        if(count($card) > 0) {
+            return $card[0];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static function river() {
+        $card = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_river');
+        if(count($card) > 0) {
+            return $card[0];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static function open() {
+        $open = DB::table('tables')->where('t_id', function($query) {
+            $query->select('t_id')->from('users')->where('id', Auth::id());
+        })->pluck('t_open');
+        if(count($open) > 0) {
+            return $open[0];
+        }
+        else {
+            return null;
+        }
+    }
+
+    public static function foldUsers() {
+        $foldUsers = DB::table('users')->where('t_id', function($query) {
+                $query->select('t_id')->from('users')->where('id', Auth::id());
+            })->where('u_fold', 1)->pluck('id');
+        $array = [];
+        foreach ($foldUsers as $foldUser) {
+            $array = array_merge($array, [$foldUser]);
+        }
+        return $array;
+    }
 }

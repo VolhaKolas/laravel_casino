@@ -46,19 +46,33 @@ class BetController extends Controller
                     $bet = $maxBet - $userBet + Players::BET;
                 }
 
-                if($userMoney - $bet < 0) { //чтобы user не ушел в минус
-                    $bet = $userMoney;
-                }
 
 
                 if (in_array('fold', $keys)) {
                     DB::table('users')->where('id', Auth::id())->update(['u_fold' => 1]);
+
+                    $countUserNotFold = DB::table('users')->where('t_id', $t_id)->
+                        where('u_fold', 0)->count();
+                    if (1 == $countUserNotFold) {
+                        $userNotFoldMoney = DB::table('users')->where('t_id', $t_id)->
+                        where('u_fold', 0)->pluck('u_money')[0];
+                        $userNotFoldMoney = $userNotFoldMoney + $tableMoney;
+                        DB::table('users')->where('t_id', $t_id)->
+                        where('u_fold', 0)->update(['u_money' => $userNotFoldMoney]);
+                        DB::table('tables')->where('t_id', $t_id)->update(['t_open' => 4, 't_money' => 0]);
+                    }
+
                 } else if (in_array('call', $keys) or in_array('raise', $keys)) { //set money
+
+                    if($userMoney - $bet < 0) { //чтобы user не ушел в минус
+                        $bet = $userMoney;
+                    }
                     DB::table('users')->where('id', Auth::id())->
                     update(['u_bet' => $userBet + $bet, 'u_money' => $userMoney - $bet]);
                     DB::table('tables')->where('t_id', $t_id)->//TODO-написать нормальный update
                     update(['t_money' => $tableMoney + $bet]);
                 }
+
                 //set new current better as for fold, as for call, as for raise
                 $inGamePlaces = DB::table('users')->where('t_id', function ($query) {
                     $query->select('t_id')->from('users')->where('id', Auth::id());
@@ -68,9 +82,8 @@ class BetController extends Controller
                     $arrayPlaces = array_merge($arrayPlaces, [$inGamePlace]);
                 }
                 sort($arrayPlaces);
-                if ($currentBetter == $arrayPlaces[count($arrayPlaces) - 1]) {
-                    $newCurrentBetter = $arrayPlaces[0];
-                } else {
+                $newCurrentBetter = $arrayPlaces[0];
+                if ($currentBetter != $arrayPlaces[count($arrayPlaces) - 1]) {
                     foreach ($arrayPlaces as $arrayPlace) {
                         if ($arrayPlace > $currentBetter) {
                             $newCurrentBetter = $arrayPlace;
@@ -82,6 +95,7 @@ class BetController extends Controller
                 update(['u_current_better' => 0]);
                 DB::table('users')->where('t_id', $t_id)-> //TODO-сделать нормальный update
                 where('u_place', $newCurrentBetter)->update(['u_current_better' => 1]);
+
                 //set user as the last better for raise
                 if (in_array('raise', $keys)) {
                     DB::table('users')->where('t_id', $t_id)->where('u_last_better', 1)->update(['u_last_better' => 0]);

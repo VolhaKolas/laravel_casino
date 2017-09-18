@@ -35,5 +35,7 @@ class ExitController extends Controller
         DB::table('users')->where('id', Auth::id())->
             update(['u_place' => null, 'u_dealer' => 0, 'u_money' => 1000, 'u_offer' => 0, 'u_answer' => 0, 't_id' => 1]);
         */
+
+        return redirect()->back();
     }
 }

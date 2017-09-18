@@ -40,13 +40,16 @@
     font-size: 12px;
     color: white;
 }
+.player p {
+    line-height: 5px;
+}
 .card {
     margin: auto;
     width: 66px;
     height: 24.6px;
     overflow: hidden;
 }
-.card1, .card2 {
+.card1, .card2, #flop1, #flop2, #flop3, #turn, #river {
     background-image: url("image/koloda.png");
     width: 33px;
     height: 49.2px;
@@ -135,3 +138,23 @@
     top: -22%;
     left: 95%;
 }
+#flop1 {
+    left: 35%;
+}
+#flop2 {
+    left: 42%;
+}
+#flop3 {
+    left: 49%;
+}
+#turn {
+    left: 56%;
+}
+#river {
+    left: 63%;
+}
+#flop1, #flop2, #flop3, #turn, #river {
+    position: absolute;
+    top: 40%;
+}
+

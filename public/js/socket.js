@@ -187,6 +187,11 @@ function sendRefusal() {
     });
 }
 
+
+function sendSocket() {
+}
+
+
 $("#break").on("submit", function () {
     return false;
 });
