@@ -122,8 +122,8 @@ class Calculation
         if($ace == true) {
             $newArrayCards = array_merge($newArrayCards, [1]); //если в массиве присутствует туз, добавляю к массиву 1
         }
+        $newArrayCards = array_unique($newArrayCards);
         rsort($newArrayCards); //сортирую массив с числами в порядке убывания
-
         $count = 0; //счетчик, к которому добавляется 1 в случае, если разница между текущим элементом цикла и предыдущим = 1
         $length = 4; //число, показывает до какого элемента массива проверять
         $result = 0; //окончательный результат
@@ -136,7 +136,7 @@ class Calculation
                 if(4 == $count) { //$count == 4, когда стрит
                     $result = $newArrayCards[$begin] * 1e+8;
                 }
-                else if($length < 6 or (6 == $length and $ace == true)) {//если стрита нет, идем еще на один круг
+                else if($length < count($newArrayCards) - 1) {//если стрита нет, идем еще на один круг
                     $length++; //увеличиваем число, до которого будем проверять
                     $begin++; //увеличиваем число, с которого будем проверять
                     $i = $begin; //при попадании в for к $i автоматически добавится 1 ($i++ в for)

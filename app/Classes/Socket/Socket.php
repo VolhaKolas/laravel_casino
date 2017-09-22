@@ -33,7 +33,7 @@ class Socket extends BaseSocket
         $data = json_decode($msg, true);
         $array = [];
         foreach ($data as $key => $item) {
-            if($key != 'user' and $key != 'answer') {
+            if($key != 'user' and $key != 'answer' and $key != 'game') {
                 $array = array_merge($array, [$item]);
             }
         }

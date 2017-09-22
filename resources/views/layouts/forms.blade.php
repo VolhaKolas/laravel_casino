@@ -1,7 +1,7 @@
 @if(\Casino\Classes\Game\Players::currentBetter()->id == \Illuminate\Support\Facades\Auth::id())
     @if(0 == \Casino\Classes\Game\Players::lastBetter() and \Casino\Classes\Game\Players::currentBet() != 0)
         <div id="bet">
-            <form enctype="multipart/form-data" method="POST" action="{{  route('bet')  }}">
+            <form enctype="multipart/form-data" method="POST" id="makeBet" action="{{  route('bet')  }}">
                 {{ csrf_field() }}
                 @if(\Casino\Classes\Game\Players::checkMoney() >= 0)
                     <div class="container">
@@ -41,7 +41,7 @@
         </div>
     @elseif(\Casino\Classes\Game\Players::open() < 4)
         <div id="bet">
-            <form enctype="multipart/form-data" method="POST" action="{{  route('next')  }}">
+            <form enctype="multipart/form-data" method="POST" id="nextBet" action="{{  route('next')  }}">
                 {{ csrf_field() }}
 
                 @if(\Casino\Classes\Game\Players::checkMoney() >= 0)

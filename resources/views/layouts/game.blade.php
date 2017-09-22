@@ -1,4 +1,3 @@
-
 <div id="table">
     @if(!Auth::guest())
         @if(\Casino\Classes\Game\Players::gameContinue() > 0) <!-- если определяется дилер при первой раздаче карт  -->

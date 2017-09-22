@@ -122,7 +122,7 @@ class NextController extends Controller
                         } else if ($dealer < $arrayPlaces[0]) {
                             $newLastBetter = $arrayPlaces[count($arrayPlaces) - 1];
                         } else {
-                            for ($i = count($arrayPlaces) - 1; $i >= 0; $i--) {
+                            for($i = count($arrayPlaces) - 1; $i >= 0; $i--) {
                                 if ($dealer > $arrayPlaces[$i]) {
                                     $newLastBetter = $arrayPlaces[$i];
                                     break;
