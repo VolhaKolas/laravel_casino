@@ -42,7 +42,7 @@
     top: 32%;
     left: 37%;
 }
-#bet {
+#bet, #betDone, #nextGame {
     color: black;
     position: absolute;
     left: -30%;

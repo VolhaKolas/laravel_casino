@@ -31,7 +31,9 @@ class SocketController extends Controller
         $currentBetter = DB::table('users')->where('id', Auth::id())->pluck('u_current_better')[0];
         if(1 == $currentBetter) {
             $lastBetter = DB::table('users')->where('id', Auth::id())->pluck('u_last_better')[0];
-            if(1 != $lastBetter) {
+            $maxBet = DB::table('users')->where('t_id', $t_id)->max('u_bet');
+            $userBet = DB::table('users')->where('id', Auth::id())->pluck('u_bet')[0];
+            if(1 != $lastBetter and $maxBet != $userBet) {
                 $form = 1; //если данный пользователь должен делать ставку, но он непоследний пользователь в раздаче
             }
             else {

@@ -4,51 +4,62 @@ var conn = new WebSocket("ws://localhost:8080");
 conn.onmessage = function (e) {
     var data = JSON.parse(e.data);
     if(data['game'] != undefined) {
+        setTimeout(function () {
         $.ajax({
             type: "POST",
             url: "/socketMessage",
             success: function (getData) {
                 getData = JSON.parse(getData);
-                console.log(getData);
-                /*
-                var bet;
-                var div;
-                var tok = "{{ csrf_field() }}";
-                var inp;
-                var inp2;
-                var inp3;
-                var inp4 = '<input type="submit" value="Выбрать" onclick="sendSocket();" class="btn btn-success">';
                 if (1 == getData[0].form) {
-                    div = '<div id="bet"><form enctype="multipart/form-data" method="POST" action="{{  route(\'next\')  }}">';
-                    inp2 = '<div class="container"><div class="row"><div class="checkbox checkbox-info"><input id="call" name="call" type="checkbox"><label for="call">Принять ставку ' + getData[0].currentBet + '$</label></div></div></div>';
-                    inp3 ='<div class="container"><div class="row"><div class="checkbox checkbox-info"><input id="fold" name="fold" type="checkbox"><label for="fold">Сбросить карты</label></div></div></div>';
-                    if(getData[0].checkMoney >= 0) {
-                        inp = '<div class="container"><div class="row"><div class="checkbox checkbox-info"><input id="raise" name="raise" type="checkbox"><label for="raise">Повысить ставку на ' + getData[0].bet + '$</label></div></div></div>';
-                        bet = div + inp + inp2 + inp3 + inp4 + '</form></div>';
+                    $('#bet').css('display', 'block');
+                    $('#bet').children().eq(0).children().eq(1).children().eq(0).children().eq(0).children().eq(1).empty();
+                    $('#bet').children().eq(0).children().eq(1).children().eq(0).children().eq(0).children().eq(1).html('Принять ставку ' + getData[0].currentBet + '$');
+
+                    if(getData[0].checkMoney < 0) {
+                        $('#raiseBet').css('display', 'none');
                     }
                     else {
-                        bet = div + inp2 + inp4 + '</form></div>';
+                        $('#raiseBet').children().eq(0).css('display', 'block');
+                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(0).children().eq(1).empty();
+                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
                     }
+
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'none');
                 }
                 else if (2 == getData[0].form) {
-                    div = '<div id="bet"><form enctype="multipart/form-data" method="POST" action="{{  route(\'next\')  }}">';
-                    inp2 = '<div class="container"><div class="row"><div class="checkbox checkbox-info"><input id="next" name="next" type="checkbox"><label for="next">Продолжить</label></div> </div></div><input type="submit" value="Выбрать" onclick="sendSocket();" class="btn btn-success">';
-                    if(getData[0].checkMoney >= 0) {
-                        inp = '<div class="container"><div class="row"><div class="checkbox checkbox-info"><input id="raise" name="raise" type="checkbox"><label for="raise">Повысить ставку на ' + getData[0].bet + '$</label></div></div></div>';
-                        bet = div + inp + inp2 + '</form></div>';
+                    $('#bet').css('display', 'none');
+                    $('#betDone').css('display', 'block');
+                    if(getData[0].checkMoney < 0) {
+                        $('#bet').children().eq(0).children().eq(0).css('display', 'none');
                     }
                     else {
-                        bet = div + inp2 + '</form></div>';
+                        $('#bet').children().eq(0).children().eq(0).css('display', 'block');
+                        $('#bet').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).empty();
+                        $('#bet').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
                     }
+
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'none');
+
                 }
                 else if (3 == getData[0].form) {
-                    bet = "<div id='playerWaiting'>Ожидание игрока: " + getData[0].currentBetter + "</div>";
+                    $('#bet').css('display', 'none');
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'block');
+                    $('#playerWaiting').empty();
+                    $('#playerWaiting').html(' Ожидание игрока: ' + getData[0].currentBetter);
+
+                    $('#nextGame').css('display', 'none');
                 }
                 else {
-                    div = '<div id="bet"><form enctype="multipart/form-data" method="POST" action="{{  route(\'nextGame\')  }}">';
-                    inp = '<input type="submit" value="Играть далее" onclick="sendSocket();" class="btn btn-success">';
-                    bet = div + tok + inp + "</form></div>";
+                    $('#bet').css('display', 'none');
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'block');
                 }
+                var betForm = document.getElementById('formWrapper');
 
 
                 var exit = document.getElementById('exit');
@@ -74,7 +85,11 @@ conn.onmessage = function (e) {
                         card2 = '<div class="card2"></div>';
                     }
                     var cards = '<div class="card">' + card1 + card2 + '</div>';
-                    var play = '<div class="player"><b>' + getData[i].login + '</b><p>' + getData[i].u_money + '$</p><p>fold</p></div>';
+                    var fold = '';
+                    if(1 == getData[i].fold) {
+                        fold = '<p>fold</p>';
+                    }
+                    var play = '<div class="player"><b>' + getData[i].login + '</b><p>' + getData[i].u_money + '$' + fold +'</div>';
                     var player = '<div id="player' + getData[i].place + '" data-id="' + getData[i].id + '">' + cards + play + '</div>';
 
                     if(getData[i].id == getData[i].dealer) {
@@ -108,10 +123,10 @@ conn.onmessage = function (e) {
                 $('#table').append(exit);
                 $('#table').append(pot);
                 $('#table').append(flop);
-                $('#table').append(bet);
-                */
+                $('#table').append(betForm);
             }
         });
+    }, 1000);
     }
     else if(data['connection'] != undefined) {
         $.ajax({
@@ -300,32 +315,35 @@ function sendRefusal() {
 
 function sendSocket() {
     var checkbox = $('#bet input[type="checkbox"]');
+    var checkbox2 = $('#nextBet input[type="checkbox"]');
     var sendMessage = 0;
+    var sendMessage2 = 0;
     for(var i = 0; i < checkbox.length; i++) {
         if($(checkbox[i]).prop('checked') == true) {
             sendMessage = 1;
         }
     }
-    if(1 == sendMessage) {
+    for(var i = 0; i < checkbox2.length; i++) {
+        if($(checkbox2[i]).prop('checked') == true) {
+            sendMessage2 = 1;
+        }
+    }
+    if(1 == sendMessage || 1 == sendMessage2) {
         $.ajax({
             type: "POST",
             url: "/socketGame",
             success: function (getData) {
                 conn.send(getData);
-                $("#makeBet").unbind('submit').submit();
-                $("#nextBet").unbind('submit').submit();
+                if(1 == sendMessage) {
+                    $("#makeBet").unbind('submit').submit();
+                }
+                else if(1 == sendMessage2) {
+                    $("#nextBet").unbind('submit').submit();
+                }
             }
         })
     }
 }
-
-$("#makeBet").on("submit", function () {
-    return false;
-});
-
-$("#nextBet").on("submit", function () {
-    return false;
-});
 
 
 $("#break").on("submit", function () {

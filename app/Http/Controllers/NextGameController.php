@@ -11,23 +11,14 @@ use Illuminate\Support\Facades\DB;
 class NextGameController extends Controller
 {
     public function post() {
-        if(4 == Players::open()) {
+        if(Players::open() >= 4) {
             $t_id = DB::table('users')->where('id', Auth::id())->pluck('t_id')[0];
             $dealer = DB::table('users')->where('t_id', $t_id)->where('u_dealer', 1)->pluck('u_place')[0];
             $inGamePlaces = DB::table('users')->where('t_id', $t_id)
-                ->where('u_money', ">", 0)->pluck('u_place'); // all available places
+                ->where('u_money', ">", 50)->pluck('u_place'); // all available places
             if(count($inGamePlaces) > 1) { //если еще по крайней мере у двух юзеров есть деньги
                 $losers = DB::table('users')->where('t_id', $t_id)
-                    ->where('u_money', "=", 0)->pluck('id');
-                if(count($losers) > 0) {
-                    foreach ($losers as $loser) {//убрала всех не имеющих средств юзеров
-                        DB::table('users')->where('id', $loser)->
-                            update(['u_place' => null, 'u_money' => Players::MONEY, 'u_bet' => 0, 'u_dealer' => 0,
-                        'u_current_better' => 0, 'u_last_better' => 0, 'u_fold' => 0, 'u_offer' => 0, 'u_answer' => 0,
-                        't_id' => 1]);
-                        DB::table('user_cards')->where('u_id', $loser)->delete();
-                    }
-                }
+                    ->where('u_money', "<", 100)->pluck('id');
                 $arrayPlaces = [];
                 foreach ($inGamePlaces as $inGamePlace) {
                     $arrayPlaces = array_merge($arrayPlaces, [$inGamePlace]);
@@ -42,7 +33,6 @@ class NextGameController extends Controller
                         }
                     }
                 }
-                dd($newDealer);
 
                 //убрала всех сбросивших карты, старого дилера, старого последнего юзера, старого текущего юзера
                 DB::table('users')->where('t_id', $t_id)->update(['u_fold' => 0, 'u_bet' => 0,
@@ -89,6 +79,16 @@ class NextGameController extends Controller
                 DB::table('tables')->where('t_id', $t_id)->update(['t_money' => $moneyTable]); //ложу деньги на стол
                 DB::table('users')->where('t_id', $t_id)
                     ->where('u_place', $currentBetter)->update(['u_current_better' => 1]);
+
+                if(count($losers) > 0) {
+                    foreach ($losers as $loser) {//убрала всех не имеющих средств юзеров
+                        DB::table('users')->where('id', $loser)->
+                        update(['u_place' => null, 'u_money' => Players::MONEY, 'u_bet' => 0, 'u_dealer' => 0,
+                            'u_current_better' => 0, 'u_last_better' => 0, 'u_fold' => 0, 'u_offer' => 0, 'u_answer' => 0,
+                            't_id' => 1]);
+                        DB::table('user_cards')->where('u_id', $loser)->delete();
+                    }
+                }
             }
             else {//если остался один юзер с деньгами, удаляем всех нахрен
                 $users = DB::table('users')->where('t_id', $t_id)->pluck('id');
