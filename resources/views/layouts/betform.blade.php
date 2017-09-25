@@ -1,17 +1,20 @@
 <form enctype="multipart/form-data" method="POST" id="makeBet" action="{{  route('bet')  }}">
     @if(\Casino\Classes\Game\Players::checkMoney() >= 0)
         <div class="container" id="raiseBet">
-            <div class="row">
-                <div class="checkbox checkbox-info">
-                    <input id="raise" name="raise" type="checkbox">
-                    <label for="raise">
-                        Повысить ставку на {{ \Casino\Classes\Game\Players::BET }}$
-                    </label>
-                </div>
+    @else
+        <div class="container" id="raiseBet" style="display: none">
+    @endif
+        <div class="row">
+            <div class="checkbox checkbox-info">
+                <input id="raise" name="raise" type="checkbox">
+                <label for="raise">
+                    Повысить ставку на {{ \Casino\Classes\Game\Players::BET }}$
+                </label>
             </div>
         </div>
-    @endif
-    <div class="container">
+    </div>
+
+    <div class="container" id="callBet">
         <div class="row">
             <div class="checkbox checkbox-info">
                 <input id="call" name="call" type="checkbox">

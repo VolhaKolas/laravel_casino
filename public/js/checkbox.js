@@ -37,11 +37,26 @@ $("#message .close").on("click", function () {
     $("#message").css("display", "none");
 });
 
-$('#bet input[type="checkbox"]').on('click', function () {
-    var check = document.querySelectorAll("#bet input[type='checkbox']");
-    for(var j = 0; j < check.length; j++) {
-        if(check[j] != this) {
-            $(check[j]).prop('checked', false);
+
+
+function bet() {
+    $('#makeBet input[type="checkbox"]').on('click', function () {
+        var check = document.querySelectorAll("#makeBet input[type='checkbox']");
+        for (var j = 0; j < check.length; j++) {
+            if (check[j] != this) {
+                $(check[j]).prop('checked', false);
+            }
         }
-    }
-});
+    });
+
+    $('#nextBet input[type="checkbox"]').on('click', function () {
+        var check = document.querySelectorAll("#nextBet input[type='checkbox']");
+        for (var j = 0; j < check.length; j++) {
+            if (check[j] != this) {
+                $(check[j]).prop('checked', false);
+            }
+        }
+    });
+}
+
+bet();

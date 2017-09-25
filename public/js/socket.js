@@ -10,55 +10,6 @@ conn.onmessage = function (e) {
             url: "/socketMessage",
             success: function (getData) {
                 getData = JSON.parse(getData);
-                if (1 == getData[0].form) {
-                    $('#bet').css('display', 'block');
-                    $('#bet').children().eq(0).children().eq(1).children().eq(0).children().eq(0).children().eq(1).empty();
-                    $('#bet').children().eq(0).children().eq(1).children().eq(0).children().eq(0).children().eq(1).html('Принять ставку ' + getData[0].currentBet + '$');
-
-                    if(getData[0].checkMoney < 0) {
-                        $('#raiseBet').css('display', 'none');
-                    }
-                    else {
-                        $('#raiseBet').children().eq(0).css('display', 'block');
-                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(0).children().eq(1).empty();
-                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
-                    }
-
-                    $('#betDone').css('display', 'none');
-                    $('#playerWaiting').css('display', 'none');
-                    $('#nextGame').css('display', 'none');
-                }
-                else if (2 == getData[0].form) {
-                    $('#bet').css('display', 'none');
-                    $('#betDone').css('display', 'block');
-                    if(getData[0].checkMoney < 0) {
-                        $('#bet').children().eq(0).children().eq(0).css('display', 'none');
-                    }
-                    else {
-                        $('#bet').children().eq(0).children().eq(0).css('display', 'block');
-                        $('#bet').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).empty();
-                        $('#bet').children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
-                    }
-
-                    $('#playerWaiting').css('display', 'none');
-                    $('#nextGame').css('display', 'none');
-
-                }
-                else if (3 == getData[0].form) {
-                    $('#bet').css('display', 'none');
-                    $('#betDone').css('display', 'none');
-                    $('#playerWaiting').css('display', 'block');
-                    $('#playerWaiting').empty();
-                    $('#playerWaiting').html(' Ожидание игрока: ' + getData[0].currentBetter);
-
-                    $('#nextGame').css('display', 'none');
-                }
-                else {
-                    $('#bet').css('display', 'none');
-                    $('#betDone').css('display', 'none');
-                    $('#playerWaiting').css('display', 'none');
-                    $('#nextGame').css('display', 'block');
-                }
                 var betForm = document.getElementById('formWrapper');
 
 
@@ -124,6 +75,61 @@ conn.onmessage = function (e) {
                 $('#table').append(pot);
                 $('#table').append(flop);
                 $('#table').append(betForm);
+
+                if (1 == getData[0].form) {
+                    $('#bet').css('display', 'block');
+
+                    $('#callBet').children().eq(0).children().eq(0).children().eq(1).empty();
+                    $('#callBet').children().eq(0).children().eq(0).children().eq(1).html('Принять ставку ' + getData[0].currentBet + '$');
+
+                    if(getData[0].checkMoney < 0) {
+                        $('#raiseBet').css('display', 'none');
+                    }
+                    else {
+                        $('#raiseBet').css('display', 'block');
+                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(1).empty();
+                        $('#raiseBet').children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
+                    }
+
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'none');
+                }
+                else if (2 == getData[0].form) {
+                    $('#betDone').css('display', 'block');
+
+
+                    if(getData[0].checkMoney < 0) {
+                        $('#nextRaiseBet').css('display', 'none');
+                    }
+                    else {
+                        $('#nextRaiseBet').css('display', 'block');
+                        $('#nextRaiseBet').children().eq(0).children().eq(0).children().eq(1).empty();
+                        $('#nextRaiseBet').children().eq(0).children().eq(0).children().eq(1).html('Повысить ставку на ' + getData[0].bet + '$');
+                    }
+
+
+                    $('#bet').css('display', 'none');
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'none');
+
+                }
+                else if (3 == getData[0].form) {
+                    $('#bet').css('display', 'none');
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'block');
+                    $('#playerWaiting').empty();
+                    $('#playerWaiting').html(' Ожидание игрока: ' + getData[0].currentBetter);
+
+                    $('#nextGame').css('display', 'none');
+                }
+                else {
+                    $('#bet').css('display', 'none');
+                    $('#betDone').css('display', 'none');
+                    $('#playerWaiting').css('display', 'none');
+                    $('#nextGame').css('display', 'block');
+                }
+                bet();
             }
         });
     }, 1000);
