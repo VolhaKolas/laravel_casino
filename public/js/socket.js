@@ -324,13 +324,14 @@ function sendSocket() {
     var checkbox2 = $('#nextBet input[type="checkbox"]');
     var sendMessage = 0;
     var sendMessage2 = 0;
+    console.log(this);
     for(var i = 0; i < checkbox.length; i++) {
         if($(checkbox[i]).prop('checked') == true) {
             sendMessage = 1;
         }
     }
-    for(var i = 0; i < checkbox2.length; i++) {
-        if($(checkbox2[i]).prop('checked') == true) {
+    for(var j = 0; j < checkbox2.length; j++) {
+        if($(checkbox2[j]).prop('checked') == true) {
             sendMessage2 = 1;
         }
     }

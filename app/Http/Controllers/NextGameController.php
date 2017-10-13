@@ -2,10 +2,10 @@
 
 namespace Casino\Http\Controllers;
 
+use Casino\Classes\Game\Better\Better;
 use Casino\Classes\Game\Dealer;
 use Casino\Classes\Game\Players;
 use Casino\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class NextGameController extends Controller
@@ -59,10 +59,10 @@ class NextGameController extends Controller
                 DB::table('users')->where('t_id', $t_id)->where('u_place', $newDealer)->
                 update(['u_dealer' => 1]); //установила дилера
 
-                $dealer = new Dealer();
-                $smallBlindPlace = $dealer->smallBlind();
-                $bigBlindPlace = $dealer->bigBlind(); //bigBlind == u_last_better, because of the biggest bet
-                $currentBetter = $dealer->currentBetter();
+                $dealer = new Better();
+                $smallBlindPlace = $dealer->smallBlind()->better();
+                $bigBlindPlace = $dealer->bigBlind()->better(); //bigBlind == u_last_better, because of the biggest bet
+                $currentBetter = $dealer->currentBetter()->better();
 
                 $moneySB = DB::table('users')->where('u_place', $smallBlindPlace)->
                     where('t_id', $t_id)->pluck('u_money')[0] - Players::BET / 2;

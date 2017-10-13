@@ -2,6 +2,7 @@
 
 namespace Casino\Http\Controllers;
 
+use Casino\Classes\Game\Better\Better;
 use Casino\Classes\Game\Dealer;
 use Casino\Classes\Game\Players;
 use Illuminate\Http\Request;
@@ -23,10 +24,10 @@ class ContinueController extends Controller
             $query->select('t_id')->from('users')->where('id', Auth::id());
         })->pluck('t_money')[0];
         if(0 == $money) {
-            $dealer = new Dealer();
-            $smallBlindPlace = $dealer->smallBlind();
-            $bigBlindPlace = $dealer->bigBlind(); //bigBlind == u_last_better, because of the biggest bet
-            $currentBetter = $dealer->currentBetter();
+            $dealer = new Better();
+            $smallBlindPlace = $dealer->smallBlind()->better();
+            $bigBlindPlace = $dealer->bigBlind()->better(); //bigBlind == u_last_better, because of the biggest bet
+            $currentBetter = $dealer->currentBetter()->better();
             $moneySB = Players::MONEY - Players::BET / 2;
             $moneyBB = Players::MONEY - Players::BET;
             $moneyTable = Players::BET * 3 / 2;

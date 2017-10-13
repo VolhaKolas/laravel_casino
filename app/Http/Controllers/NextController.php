@@ -181,7 +181,7 @@ class NextController extends Controller
                                 }
                             }
                             $calculation = new Calculation($arrayCalculate);
-                            $result = $calculation->priority();
+                            $result = $calculation->getResult();
                             if($result > $lastResult) {
                                 $arrayWinners = [$arrayCard[0]];
                             }

@@ -9,10 +9,12 @@ namespace Casino\Classes\Calculation;
 class Calculation
 {
     private $arrayCards;
+    private $result;
 
     public function __construct(array $array)
     {
         $this->arrayCards = $array;
+        $this->priority();
     }
 
     private function pokerFlush() {
@@ -256,7 +258,7 @@ class Calculation
         return $result;
     }
 
-    public function priority() {
+    private function priority() {
         //здесь я определяю старшую карту
         if($this->arrayCards[5] % 100 > $this->arrayCards[6] % 100) { //условились, что две последние карты массива - карманные
             $highCard1 = $this->arrayCards[5] % 100;
@@ -273,24 +275,30 @@ class Calculation
 
         //далее определяю результат согласно приоритету комбинаций
         if($flush >= 1e+16) {
-            $result = $flush; //стрит флеш
+            $this->result = $flush; //стрит флеш
         } else if($couple >= 1e+14 and $couple < 1e+16) {
-            $result = $couple; //каре
+            $this->result = $couple; //каре
         } else if($couple >= 1e+12 and $couple < 1e+14) {
-            $result = $couple; //фулл хаус
+            $this->result = $couple; //фулл хаус
         } else if($flush >= 1e+10) {
-            $result = $flush; //флеш
+            $this->result = $flush; //флеш
         } else if($straight >= 1e+8 and $straight < 1e+10) {
-            $result = $straight; //стрит
+            $this->result = $straight; //стрит
         } else if($couple >= 1e+6 and $couple < 1e+8) {
-            $result = $couple; //тройка
+            $this->result = $couple; //тройка
         } else if($couple >= 1e+4 and $couple < 1e+6) {
-            $result = $couple; //две пары
+            $this->result = $couple; //две пары
         } else if($couple >= 1e+2 and $couple < 1e+4) {
-            $result = $couple; //пара
+            $this->result = $couple; //пара
         } else {
-            $result = $highCard1 + $highCard2 * 1e-2; //старшая карта
+            $this->result = $highCard1 + $highCard2 * 1e-2; //старшая карта
         }
-        return $result;
+    }
+
+    public function getResult() {
+        if(isset($this->result)) {
+            return $this->result;
+        }
+        return 0;
     }
 }
