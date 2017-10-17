@@ -23,6 +23,7 @@ class CreateTablesTable extends Migration
             $table->integer('t_turn')->nullable();
             $table->integer('t_river')->nullable();
             $table->integer('t_open')->default(0);
+            $table->engine = 'InnoDB';
         });
     }
 

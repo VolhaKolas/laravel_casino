@@ -18,7 +18,7 @@ class Dealer
 
     public function __construct()
     {
-        $this->places =  DB::table('users')->where('t_id', function ($query) {
+        $this->places = DB::table('users')->where('t_id', function ($query) {
             $query->select('t_id')->from('users')->where('id', Auth::id());
         })->pluck('u_place');
 

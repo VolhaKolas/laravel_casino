@@ -6,8 +6,10 @@
  * Time: 3:35
  */
 namespace Casino\Classes\Game\Better;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
+use Casino\Classes\Game\Better\BetterPlace\BigBlindBetterPlace;
+use Casino\Classes\Game\Better\BetterPlace\CurrentBetterPlace;
+use Casino\Classes\Game\Better\BetterPlace\SmallBlindBetterPlace;
 class Better extends BaseBetter
 {
     public function smallBlind() {

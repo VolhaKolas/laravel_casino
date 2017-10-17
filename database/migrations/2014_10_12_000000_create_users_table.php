@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             $table->integer('u_dealer_card')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

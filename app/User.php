@@ -28,16 +28,27 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public static function offer() {
+
+    public function table() {
+        return $this->belongsTo('Casino\Table', 't_id', 't_id');
+    }
+
+    protected $primaryKey = 'id';
+
+    public function userCard() {
+        return $this->hasMany('Casino\UserCard', 'u_id', 'id');
+    }
+
+    public static function offer() { // возвращает u_offer текущего пользователя из БД
         return User::where('id', Auth::id())->pluck('u_offer');
     }
 
-    public static function answer() {
+    public static function answer() { // возвращает u_answer текущего пользователя из БД
         return User::where('id', Auth::id())->pluck('u_answer');
     }
 
 
-    public static function usersToAnswer() {
+    public static function usersToAnswer() { // пользователи, которые еще должны ответить (их login и id)
         $u_ids = DB::table('users')
             ->where('t_id', function ($query) {
             $query->select("t_id")->from('users')->where('id', Auth::id());
@@ -49,7 +60,7 @@ class User extends Authenticatable
         return $ids;
     }
 
-    public static function loginToAnswer() {
+    public static function loginToAnswer() { // пользователи, которые еще должны ответить (их login)
         $u_ids = DB::table('users')
             ->where('t_id', function ($query) {
             $query->select("t_id")->from('users')->where('id', Auth::id());
@@ -61,7 +72,7 @@ class User extends Authenticatable
         return $ids;
     }
 
-    public static function loginIdToAnswer() {
+    public static function loginIdToAnswer() {// пользователи, которые еще должны ответить (их login и id)
         $u_ids = DB::table('users')
             ->where('t_id', function ($query) {
             $query->select("t_id")->from('users')->where('id', Auth::id());
@@ -69,7 +80,7 @@ class User extends Authenticatable
         return $u_ids;
     }
 
-    public static function gameBegin() {
+    public static function gameBegin() { // определение начала игры (если у всех пользователей за столом u_answer == 1)
         $t_id = DB::table('users')->where('id', Auth::id())->pluck('t_id')[0];
         if(1 != $t_id) {
             $countUsers = DB::table('users')->where('t_id', $t_id)->count();
@@ -159,7 +170,7 @@ class User extends Authenticatable
     }
 
 
-    public static function players() {
+    public static function players() { //id пользователей, которые сидят с текущим пользователем за одним столом
         $players = DB::table('users')->where('t_id', function ($query) {
             $query->select("t_id")->from('users')->where('id', Auth::id());
         })->where('id', "!=", Auth::id())->pluck('id');

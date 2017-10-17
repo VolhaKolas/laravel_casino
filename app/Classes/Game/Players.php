@@ -53,7 +53,7 @@ class Players
         return $currentBetter;
     }
 
-    public static function gameContinue() {
+    public static function gameContinue() { //игра на стадии, когда дилер определен
         $dealerCards = DB::table('users')->where('t_id', function ($query) {
             $query->select('t_id')->from('users')->where('id', Auth::id());
         })->where('u_dealer_card', '!=', null)->count();

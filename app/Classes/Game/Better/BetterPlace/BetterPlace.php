@@ -5,7 +5,7 @@
  * Date: 13.10.17
  * Time: 4:02
  */
-namespace Casino\Classes\Game\Better;
+namespace Casino\Classes\Game\Better\BetterPlace;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 abstract class BetterPlace

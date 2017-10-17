@@ -3,15 +3,15 @@
  * Created by PhpStorm.
  * User: olgakolos
  * Date: 13.10.17
- * Time: 4:27
+ * Time: 4:23
  */
-namespace Casino\Classes\Game\Better;
-class CurrentBetterPlace extends BetterPlace
+namespace Casino\Classes\Game\Better\BetterPlace;
+class BigBlindBetterPlace extends BetterPlace
 {
     public function __construct()
     {
         parent::__construct();
-        $prevBetter = new BigBlindBetterPlace();
+        $prevBetter = new SmallBlindBetterPlace();
         $this->prevBetter = $prevBetter->better();
     }
 
