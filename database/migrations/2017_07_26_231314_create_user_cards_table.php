@@ -18,6 +18,7 @@ class CreateUserCardsTable extends Migration
             $table->integer('u_id')->length(10)->unsigned();
             $table->foreign('u_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('uc_card');
+            $table->engine = 'InnoDB';
         });
     }
 

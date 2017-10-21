@@ -44,6 +44,6 @@ Route::group(['middleware' => ['auth']], function($router) {
 });
 
 
-
+Route::get('/demo', 'DemoGameController@get');
 Route::get('/', 'WelcomController@index');
 Route::get('/home', 'HomeController@index')->name('home');

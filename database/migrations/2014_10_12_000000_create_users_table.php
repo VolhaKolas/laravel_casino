@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('lastname', 100);
             $table->string('email', 100)->unique();
             $table->string('password', 100);
+            $table->integer('u_admin')->default(0);
             $table->integer('u_time');
             $table->integer('u_place')->nullable();
             $table->integer('u_money')->default(\Casino\Classes\Game\Players::MONEY);

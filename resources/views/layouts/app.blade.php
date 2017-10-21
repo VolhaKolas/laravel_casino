@@ -23,8 +23,9 @@
 </head>
 <body>
 
-
+@if(!Auth::guest())
 {{\Casino\TableId::id1()}}
+@endif
 
 <input type="hidden" id="user" data-user="{{ Illuminate\Support\Facades\Auth::id() }}">
 
@@ -44,6 +45,9 @@
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
                         Casino
+                    </a>
+                    <a class="navbar-brand" href="{{ url('demo') }}">
+                        DemoGame
                     </a>
                 </div>
 
